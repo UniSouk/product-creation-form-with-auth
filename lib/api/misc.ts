@@ -28,9 +28,6 @@ export const generateSku = (
   }
 };
 
-
-
-
 export const generateSlug = (name: string, separator?: string, preserved?: string[]) => {
     let p = ['.', '=', '-'];
     let s = '-';

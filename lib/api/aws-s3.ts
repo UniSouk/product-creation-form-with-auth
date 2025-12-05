@@ -4,6 +4,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { env } from "@/lib/env";
 
 const extractBucketNameAndKey = (uri: string) => {
   const uriWithoutPrefix = uri.replace("s3://", "");
@@ -17,20 +18,18 @@ const extractBucketNameAndKey = (uri: string) => {
 
 export const getPreSignedUrl = async (key: string): Promise<string> => {
   const command = new PutObjectCommand({
-    Bucket: process.env.S3_BUCKET_NAME,
+    Bucket: env.S3_BUCKET_NAME,
     Key: key,
   });
 
   // TODO: move this function to shared library
   const presignedUrl = await getSignedUrl(
     new S3Client({
-      region: process.env.AWS_REGION,
+      region: env.AWS_REGION,
     }),
     command,
     {
-      expiresIn: parseInt(
-        String(process.env.S3_SIGNED_URL_EXPIRY_TIME || 86400)
-      ),
+      expiresIn: env.S3_SIGNED_URL_EXPIRY_TIME,
     }
   );
 
@@ -48,13 +47,11 @@ export const getFileUrl = async (uri: string) => {
 
     const presignedUrl = await getSignedUrl(
       new S3Client({
-        region: process.env.AWS_REGION,
+        region: env.AWS_REGION,
       }),
       command,
       {
-        expiresIn: parseInt(
-          String(process.env.S3_SIGNED_URL_EXPIRY_TIME || 86400)
-        ),
+        expiresIn: env.S3_SIGNED_URL_EXPIRY_TIME,
       }
     );
 

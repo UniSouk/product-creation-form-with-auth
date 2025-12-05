@@ -1,4 +1,5 @@
 import jwt, { SignOptions } from "jsonwebtoken";
+import { env } from "@/lib/env";
 
 type JwtPayload = {
   sub: string;
@@ -6,24 +7,12 @@ type JwtPayload = {
   type: "access" | "refresh";
 };
 
-const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!;
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
-const ACCESS_EXPIRES_IN = process.env.JWT_ACCESS_EXPIRES_IN ?? "15m";
-const REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN ?? "7d";
-
-if (!JWT_ACCESS_SECRET) {
-  throw new Error('JWT_ACCESS_SECRET environment variable is not set');
-}
-
-if (!JWT_REFRESH_SECRET) {
-  throw new Error('JWT_REFRESH_SECRET environment variable is not set');
-}
+const JWT_ACCESS_SECRET = env.JWT_ACCESS_SECRET;
+const JWT_REFRESH_SECRET = env.JWT_REFRESH_SECRET;
+const ACCESS_EXPIRES_IN = env.JWT_ACCESS_EXPIRES_IN;
+const REFRESH_EXPIRES_IN = env.JWT_REFRESH_EXPIRES_IN;
 
 export function signAccessToken(userId: string, email: string): string {
-  if (!JWT_ACCESS_SECRET) {
-    throw new Error('JWT_ACCESS_SECRET is not configured');
-  }
-
   return jwt.sign(
     { sub: userId, email, type: "access" } satisfies JwtPayload,
     JWT_ACCESS_SECRET,
@@ -32,10 +21,6 @@ export function signAccessToken(userId: string, email: string): string {
 }
 
 export function signRefreshToken(userId: string, email: string): string {
-  if (!JWT_REFRESH_SECRET) {
-    throw new Error('JWT_REFRESH_SECRET is not configured');
-  }
-  
   return jwt.sign(
     { sub: userId, email, type: "refresh" } satisfies JwtPayload,
     JWT_REFRESH_SECRET,
