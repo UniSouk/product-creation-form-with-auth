@@ -1,16 +1,6 @@
-export const STRAPI_URL = process.env.VITE_STRAPI_URL;
 
-// export const BASE_URL = "http://192.168.29.253:3001";
-export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 // export const BASE_URL = "https://dev-api.unisouk.com";
-
-export const GOOGLE_AUTH_URL = `${BASE_URL}/auth/google`;
-
-export const DEPLOY_ENV = process.env.VITE_DEPLOY_ENV;
-
-export const shopifyBaseUrl = process.env.VITE_SHOPIFY_BASE_URL;
-
-export const wixBaseUrl = process.env.VITE_WIX_BASE_URL;
 
 export const Countries: {
   id: string;
