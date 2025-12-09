@@ -200,22 +200,31 @@ const Control = (props: ControlProps<OptionVariantType, true>) => {
         props.innerProps?.onMouseDown?.(e);
       },
       onTouchStart: (e: React.TouchEvent<HTMLDivElement>) => {
-        e.stopPropagation();
+        // e.stopPropagation();\
         setMenuIsOpen(true);
         setIsFocused(true);
-
         props.innerProps?.onTouchStart?.(e);
+      },
+      onTouchEnd: (e: React.TouchEvent<HTMLDivElement>) => {
+        props.innerProps?.onTouchEnd?.(e);
       }
     }
   };
     return (
       <>
-        <components.Menu {...{...newProps}}>
+        <components.Menu {...{ ...newProps }}>
           {props.children}
           {noOption && (
             <div
-              className="text-Brand-700 text-sm font-semibold flex justify-center items-center gap-1.5 bg-Brand-25 rounded-b-lg py-2.5 cursor-pointer"
-              onClick={() => setModalOpen?.(true)}
+              className="text-Brand-700 text-sm font-semibold flex justify-center items-center gap-1.5 bg-Brand-25 rounded-b-lg py-2.5 cursor-pointer z-50"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent event bubbling
+                setModalOpen?.(true);
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation(); // Prevent touch bubbling
+                setModalOpen?.(true);
+              }}
             >
               {/* <img src={PlusIcon} alt="plus-icon" /> */}
               <PlusIcon />

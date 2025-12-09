@@ -1,4 +1,4 @@
-import { getFileUrl } from "@/lib/api/aws-s3";
+import { getPreSignedUrl } from "@/lib/api/aws-s3";
 import { handleApiError } from "@/lib/api/error-handler";
 import { getAuthUser, requireAuth } from "@/lib/api/middleware";
 import {
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       return errorResponse("Validation failed", 400, validationResult.errors);
     }
 
-    const { assets } = await req.json();
+    const { assets } = reqBody;
     const createAsset = await prisma.$transaction(async (tx) => {
       const assetsData = [];
       const response = [];
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
           SELECT public.next_id() as next_id`;
 
         const extension = asset.mimeType.split("/")[1];
-        const key = `store/${storeId}/assets/${assetId}.${extension}`;
+        const key = `demo-app/store/${storeId}/assets/${assetId}.${extension}`;
         const bucketName = process.env.S3_BUCKET_NAME;
         const uri = `s3://${bucketName}/${key}`;
         const metadata = {
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
           mimeType: asset.mimeType,
         };
 
-        const signedUrl = await getFileUrl(key);
+        const signedUrl = await getPreSignedUrl(key);
 
         // Prepare data for batch insertion
         assetsData.push({
@@ -112,8 +112,7 @@ export async function PATCH(req: NextRequest) {
       return errorResponse("Validation failed", 400, validationResult.errors);
     }
 
-    const body = await req.json();
-    const { productAssets, variantAssets } = body;
+    const { productAssets, variantAssets } = reqBody;
     const isDefaultVariant = false; // Assuming default false as per original service signature
 
     // Prepare all updates as rows for the VALUES clause
@@ -207,8 +206,7 @@ export async function DELETE(req: NextRequest) {
       return errorResponse("Validation failed", 400, validationResult.errors);
     }
 
-    const body = await req.json();
-    const { assetIds } = body;
+    const { assetIds } = reqBody;
 
     if (assetIds && assetIds.length > 0) {
       // Build the SQL query to update the deletedAt column

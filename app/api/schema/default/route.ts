@@ -1,7 +1,7 @@
 import { handleApiError } from "@/lib/api/error-handler";
 import { getAuthUser, requireAuth } from "@/lib/api/middleware";
 import { getVariantRule } from "@/lib/api/misc";
-import { unauthorizedResponse } from "@/lib/api/response";
+import { errorResponse, unauthorizedResponse } from "@/lib/api/response";
 import { prisma } from "@/lib/prisma";
 import { VariantAttributeType } from "@/types/api";
 import { ptypeToUskSizeMap } from "@/types/constant";
@@ -22,6 +22,10 @@ export async function GET(request: NextRequest) {
         { error: "Query param 'type' is required" },
         { status: 400 }
       );
+    }
+    const storeId = request.headers.get("x-store-id");
+    if (!storeId) {
+      return errorResponse("Store id is required", 400);
     }
     const gender = request.nextUrl.searchParams.get("gender");
     const brand = request.nextUrl.searchParams.get("brand");
@@ -59,12 +63,12 @@ export async function GET(request: NextRequest) {
     const res = (
       await prisma.variantOptionOnSubCategory.findMany({
         //@ts-ignore
-        relationLoadStrategy: "join",
+        // relationLoadStrategy: "join",
         where: {
           typeName: ptype,
-          storeId: null,
+         OR: [{ storeId: null }, { storeId: BigInt(storeId) }],
           variantOption: {
-            storeId: null,
+            OR: [{ storeId: null }, { storeId: BigInt(storeId) }],
             brand: brandValue,
             gender: {
               in: genderValues,
@@ -80,7 +84,7 @@ export async function GET(request: NextRequest) {
             },
           },
         },
-        select: {
+        include: {
           variantOption: true,
         },
       })

@@ -1,19 +1,41 @@
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import * as fs from "fs";
-const prisma = new PrismaClient();
+import path from "path";
+import { Pool } from "pg";
+// const prisma = new PrismaClient();
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
 
-const RET12 = JSON.parse(fs.readFileSync("./data/RET12.json", "utf8"));
-const RET13 = JSON.parse(fs.readFileSync("./data/RET13.json", "utf8"));
-const RET16 = JSON.parse(fs.readFileSync("./data/RET16.json", "utf8"));
+// Create a shared Postgres pool and Prisma adapter
+const pool = new Pool({
+  connectionString: "",
+});
 
-const RET10 = JSON.parse(fs.readFileSync("./data/RET10.json", "utf8"));
-const RET14 = JSON.parse(fs.readFileSync("./data/RET14.json", "utf8"));
-const RET15 = JSON.parse(fs.readFileSync("./data/RET15.json", "utf8"));
-const RET18 = JSON.parse(fs.readFileSync("./data/RET18.json", "utf8"));
+const adapter = new PrismaPg(pool);
+
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    adapter,
+    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+  });
+
+const RET12 = JSON.parse(fs.readFileSync(path.join(__dirname, "./data/RET12.json"), "utf8"));
+const RET13 = JSON.parse(fs.readFileSync(path.join(__dirname, "./data/RET13.json"), "utf8"));
+const RET16 = JSON.parse(fs.readFileSync(path.join(__dirname, "./data/RET16.json"), "utf8"));
+
+const RET10 = JSON.parse(fs.readFileSync(path.join(__dirname, "./data/RET10.json"), "utf8"));
+const RET14 = JSON.parse(fs.readFileSync(path.join(__dirname, "./data/RET14.json"), "utf8"));
+const RET15 = JSON.parse(fs.readFileSync(path.join(__dirname, "./data/RET15.json"), "utf8"));
+const RET18 = JSON.parse(fs.readFileSync(path.join(__dirname, "./data/RET18.json"), "utf8"));
 
 const enumValues: {
   [key: string]: string[];
-} = JSON.parse(fs.readFileSync("./data/enum_values.json", "utf8"));
+} = JSON.parse(fs.readFileSync(path.join(__dirname, "./data/enum_values.json"), "utf8"));
+
+//"./data/enum_values.json
 
 async function seedEnumValues() {
   const values: {

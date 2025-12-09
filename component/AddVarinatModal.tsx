@@ -389,7 +389,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
 
   const assetsUrlsListMutation = useMutation({
     mutationFn: async (payload: { assetIds: string[] }) => {
-      const { data } = await productApi.post("/asset/all", payload, {
+      const { data } = await productApi.post("/api/asset/all", payload, {
         headers: {
           "x-store-id": storeId,
         },
@@ -421,7 +421,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
   // delete assets mutations
   const deleteAssetMutation = useMutation({
     mutationFn: async (payload: { assetIds: string[] }) => {
-      const res = await productApi.delete(`/asset`, {
+      const res = await productApi.delete(`/api/asset`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -448,7 +448,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
   const variantMutationHandle = useMutation({
     mutationFn: async (payload: Variants[]) => {
       const { data } = await productApi.post(
-        `/product/${singleProductData.id}/variant`,
+        `/api/product/${singleProductData.id}/variant`,
         payload,
       );
       return data;
@@ -473,7 +473,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
   // fetch schema for variants
   const variantFetch = async () => {
     const { data } = await productApi.get(
-      `/option/schema?ptype=${productTypeName}&gender=${gender}`,
+      `/api/schema/default?type=${productTypeName}&gender=${gender}`,
     );
     return data;
   };

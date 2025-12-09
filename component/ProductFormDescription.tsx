@@ -83,6 +83,7 @@ function ProductFormDescription({
   isGenderEnable,
   setIsGenderEnable,
 }: ProductDescriptionPropType) {
+  const [isMounted, setIsMounted] = useState<boolean>(false);
   const [category, setCategory] = useState<Option>();
   const [categoryItems, setCategoryItems] = useState<CategoryType[]>([]);
   // const [productType, setProductType] = useState<string>("");
@@ -91,6 +92,10 @@ function ProductFormDescription({
     useState<boolean>(false);
   const [productTypeItems, setProductTypeItems] = useState<CategoryType[]>([]);
   const [productTypeEmpty, setProductTypeEmpty] = useState<null | Option>(null);
+
+   useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const { data, isSuccess } = useQuery({
     queryKey: ["category"],
@@ -102,7 +107,7 @@ function ProductFormDescription({
   });
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && isMounted) {
       const categoryList = data.data.map((ctgr: CategoryResponseType) => {
         return {
           label: ctgr.name,
@@ -111,7 +116,8 @@ function ProductFormDescription({
       });
       setCategoryItems(categoryList);
     }
-  }, [isSuccess, data]);
+  }, [isSuccess, data, isMounted]);
+
 
   const {
     register,
@@ -308,6 +314,8 @@ const productTypeHandle = (val: Option | Option[] | null) => {
   // ================================ edit product data ================================
 
   useEffect(() => {
+    if (!isMounted) return;
+
     data?.data?.forEach((proType: CategoryResponseType) => {
       if (proType.id === singleProductData?.categoryId) {
         if (Array.isArray(proType.subCategories)) {
@@ -338,6 +346,9 @@ const productTypeHandle = (val: Option | Option[] | null) => {
   ]);
 
   useEffect(() => {
+
+    if (!isMounted || !singleProductData || Object.keys(singleProductData).length === 0) return;
+
     if (singleProductData && Object.keys(singleProductData).length > 0) {
       setIsProductTypeEnable(!!singleProductData.subCategoryId);
 
@@ -377,7 +388,16 @@ const productTypeHandle = (val: Option | Option[] | null) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [singleProductData, categoryItems]);
+  }, [singleProductData, categoryItems, isMounted]);
+
+    if (!isMounted) {
+    return (
+      <div suppressHydrationWarning className="md:p-6 p-3 flex flex-col md:gap-5 gap-2.5 border border-Gray-200 bg-white rounded-xl shadow-shadow-xs">
+        <h3 className="text-Gray-700 md:text-lg text-base font-semibold">Description</h3>
+      </div>
+    );
+  }
+
   
 
   return (

@@ -562,3 +562,7 @@ pre[class*="language-"] {
   margin: 0;
   padding: 1rem;
 }
+
+.custom-no-icon .lucide-cross {
+  display: none;
+}

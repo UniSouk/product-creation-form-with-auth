@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { AssetType } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {

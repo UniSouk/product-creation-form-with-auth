@@ -3,7 +3,7 @@ import { StoreData } from "../type/setting-type"
 // import { getStoreId } from "./cookies";
 
 export const fetchStoreDetails = async () => {
-  const res = await api.get(`/store/settings`);
+  const res = await api.get(`/api//users/me`);
   return res.data.data as StoreData;
 };
 

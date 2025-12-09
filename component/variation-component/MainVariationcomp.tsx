@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import {
   AddOptionPayloadType,
@@ -32,7 +32,7 @@ interface MainVariationcompType {
 export const addOptionsHandleMutation = (onSuccessRefetchData: () => void) =>
   useMutation({
     mutationFn: async (payload: AddOptionPayloadType) => {
-      const { data } = await productApi.post("/option", payload, {
+      const { data } = await productApi.post("/api/option", payload, {
         headers: {
           "x-store-id": storeId,
         },
@@ -71,21 +71,21 @@ function MainVariationcomp({ schema, errors = {} }: MainVariationcompType) {
 
   return (
     <div>
-      {Object.entries(schema.properties).map(([rootKey, rootValue]) => {
+      {schema?.properties && Object.entries(schema.properties).map(([rootKey, rootValue]) => {
         if (rootKey === "variation" && isVariant) {
           return (
-            <>
+            <React.Fragment key={rootKey}>
               <VariationPropComp
                 schemaValue={rootValue as Record<string, unknown>}
                 key={rootKey}
                 optionsRef={optionsRef}
                 mainKey={rootKey}
               />
-            </>
+            </React.Fragment>
           );
         } else if (rootKey === "size") {
           return (
-            <>
+            <React.Fragment key={rootKey}>
               <SizePropComp
                 schemaValue={rootValue as Record<string, unknown>}
                 key={rootKey}
@@ -97,11 +97,11 @@ function MainVariationcomp({ schema, errors = {} }: MainVariationcompType) {
                   {errors[rootKey].message}
                 </p>
               )}
-            </>
+            </React.Fragment>
           );
         } else if (rootKey === "color") {
           return (
-            <>
+            <React.Fragment key={rootKey}>
               <ColorPropComp
                 schemaValue={rootValue as Record<string, unknown>}
                 key={rootKey}
@@ -113,11 +113,11 @@ function MainVariationcomp({ schema, errors = {} }: MainVariationcompType) {
                   {errors[rootKey].message}
                 </p>
               )}
-            </>
+            </React.Fragment>
           );
         } else if (rootKey === "itemWeight") {
           return (
-            <>
+            <React.Fragment key={rootKey}>
               <WeightPropComp
                 schemaValue={rootValue as Record<string, unknown>}
                 key={rootKey}
@@ -129,11 +129,11 @@ function MainVariationcomp({ schema, errors = {} }: MainVariationcompType) {
                   {errors[rootKey].message}
                 </p>
               )}
-            </>
+            </React.Fragment>
           );
         } else if (rootKey === "scent") {
           return (
-            <>
+            <React.Fragment key={rootKey}>
               <ScentPropComp
                 schemaValue={rootValue as Record<string, unknown>}
                 key={rootKey}
@@ -145,11 +145,11 @@ function MainVariationcomp({ schema, errors = {} }: MainVariationcompType) {
                   {errors[rootKey].message}
                 </p>
               )}
-            </>
+            </React.Fragment>
           );
         } else if (rootKey === "flavor") {
           return (
-            <>
+            <React.Fragment key={rootKey}>
               <FlavorPropComp
                 schemaValue={rootValue as Record<string, unknown>}
                 key={rootKey}
@@ -161,11 +161,11 @@ function MainVariationcomp({ schema, errors = {} }: MainVariationcompType) {
                   {errors[rootKey].message}
                 </p>
               )}
-            </>
+            </React.Fragment>
           );
         } else if (rootKey === "numberOfItems") {
           return (
-            <>
+            <React.Fragment key={rootKey}>
               <NumberOfItemsPropComp
                 schemaValue={rootValue as Record<string, unknown>}
                 key={rootKey}
@@ -177,7 +177,7 @@ function MainVariationcomp({ schema, errors = {} }: MainVariationcompType) {
                   {errors[rootKey].message}
                 </p>
               )}
-            </>
+            </React.Fragment>
           );
         }
       })}

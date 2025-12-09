@@ -9,14 +9,22 @@ export const getEmail = () => Cookies.get("email");
 export const setToken = (token: string) => {
   // Cookies.set("token", token, { expires: 7 });
 };
+
+export const getRefreshToken = () => {
+  return Cookies.get("refreshToken");
+}
 export const getToken = () => Cookies.get("token");
 
 export const setStoreId = (storeId: string) => {
-  const prevStoreId = getStoreId();
+  // const prevStoreId = getStoreId();
   Cookies.set("storeId", storeId, { expires: 7 });
 };
 
-export const getStoreId = () => Cookies.get("storeId");
+export const getStoreId = () =>{ return Cookies.get("storeId")};
+
+export const getAccessToken = () => {
+  return Cookies.get("accessToken");
+};
 // export const getStoreId = () => {
 //   const storeId = "store_Vc3PvYOQrna9GOF7";
 //   return storeId;
@@ -24,6 +32,8 @@ export const getStoreId = () => Cookies.get("storeId");
 
 export const removeAllCookies = () => {
   Cookies.remove("token");
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
   Cookies.remove("storeId");
   Cookies.remove("inventoryStrategy");
   setAccessToken(null);

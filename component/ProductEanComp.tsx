@@ -20,8 +20,8 @@ const EanSchema = z.object({}).catchall(
       },
       {
         message: "EAN must be 8 or 13 digits",
-      },
-    ),
+      }
+    )
 );
 
 function ProductEanComp() {
@@ -33,8 +33,8 @@ function ProductEanComp() {
     singleProductData?.variants && singleProductData.variants.length > 0
       ? singleProductData.variants
       : updatedVariants && updatedVariants.length > 0
-        ? updatedVariants
-        : variants;
+      ? updatedVariants
+      : variants;
 
   // Form setup
   const {
@@ -47,13 +47,16 @@ function ProductEanComp() {
     trigger,
   } = useForm({
     defaultValues:
-      activeVariants?.reduce(
-        (acc, variant, idx) => {
-          acc[`eanNumber-${idx}`] = variant.externalProductId?.value || "";
-          return acc;
-        },
-        {} as Record<string, string>,
-      ) || {},
+      activeVariants?.reduce((acc, variant, idx) => {
+        if (idx === 0) {
+          // only first EAN pre-filled
+          acc[`eanNumber-0`] = variant.externalProductId?.value || "";
+        } else {
+          // rest blank
+          acc[`eanNumber-${idx}`] = "";
+        }
+        return acc;
+      }, {} as Record<string, string>) || {},
     resolver: zodResolver(EanSchema),
     mode: "all",
     reValidateMode: "onChange",
@@ -71,7 +74,7 @@ function ProductEanComp() {
   const fetchEanValidation = async (value: string) => {
     try {
       const { data } = await api.get(
-        `/product/external-product-identifier?type=EAN&value=${value}`,
+        `/api/external-product-identifier?type=EAN&value=${value}`
       );
       return data;
     } catch (error) {
@@ -168,9 +171,9 @@ function ProductEanComp() {
   }, [eanValues, activeVariants?.length]);
 
   // Error states
-const errorEan = Object.values(errors).map((err) =>
-  typeof err === "object" && err && "message" in err ? err.message : ""
-);
+  const errorEan = Object.values(errors).map((err) =>
+    typeof err === "object" && err && "message" in err ? err.message : ""
+  );
 
   useEffect(() => {
     if (errorEan.length > 0) {
@@ -188,9 +191,12 @@ const errorEan = Object.values(errors).map((err) =>
 
   useEffect(() => {
     if (!activeVariants?.length) return;
-
     activeVariants.forEach((variant, idx) => {
-      setValue(`eanNumber-${idx}`, variant.externalProductId?.value || "");
+      if (idx === 0) {
+        setValue(`eanNumber-0`, variant.externalProductId?.value || "");
+      } else {
+        setValue(`eanNumber-${idx}`, "");
+      }
     });
 
     const validateAllFields = async () => {
@@ -233,7 +239,7 @@ const errorEan = Object.values(errors).map((err) =>
             };
           }
           return variant;
-        },
+        }
       );
 
       useProductStore.setState({
@@ -257,7 +263,7 @@ const errorEan = Object.values(errors).map((err) =>
           };
         }
         return variant;
-      },
+      }
     );
 
     if (
@@ -307,7 +313,7 @@ const errorEan = Object.values(errors).map((err) =>
       .map((attr) => attr.getValue())
       .filter(
         (value): value is string =>
-          value !== undefined && value !== null && value !== "",
+          value !== undefined && value !== null && value !== ""
       );
 
     return `${validAttributes.join("/")}`;
@@ -320,7 +326,9 @@ const errorEan = Object.values(errors).map((err) =>
   return (
     <div className="p-3 md:p-6 flex flex-col gap-5 border border-Gray-200 bg-white rounded-xl shadow-xs">
       <div className="">
-        <h3 className="text-Gray-700 md:text-lg text-base font-semibold">Ean Number</h3>
+        <h3 className="text-Gray-700 md:text-lg text-base font-semibold">
+          Ean Number
+        </h3>
       </div>
       <div className="border border-gray-200 rounded-xl shadow-sm p-2 pb-0">
         <table className="table-fixed w-full">
@@ -345,17 +353,25 @@ const errorEan = Object.values(errors).map((err) =>
                     {variant.option?.data && variantTitle(variant.option.data)}
                   </div>
                 </td>
-                <td className="flex flex-col justify-start p-4 h-20">
-                  <InputComp
-                    disabled={singleProductData.id ? true : false}
-                    className=""
-                    placeHolder="Enter EAN"
-                    type="text"
-                    name={`eanNumber-${idx}`}
-                    inputid={`ean-${idx}`}
-                    register={register}
-                    error={errors[`eanNumber-${idx}`]}
-                  />
+                <td className="p-4">
+                  <div className="flex flex-col gap-1 w-full max-w-xs">
+                    <InputComp
+                      disabled={singleProductData.id ? true : false}
+                      placeHolder="Enter EAN"
+                      type="text"
+                      name={`eanNumber-${idx}`}
+                      inputid={`ean-${idx}`}
+                      register={register}
+                      // error={errors[`eanNumber-${idx}`]}
+                    />
+
+                    {/* Force spacing on error so the cell expands */}
+                    {errors[`eanNumber-${idx}`] && (
+                      <span className="text-red-500 text-xs mt-1 block">
+                        {errors[`eanNumber-${idx}`]?.message}
+                      </span>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

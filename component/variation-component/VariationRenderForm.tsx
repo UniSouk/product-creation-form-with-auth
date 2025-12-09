@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MultiSelectVariation from "./MultiSelectVariation";
 
 import VariationInputComp from "./VariationInputComp";
@@ -79,19 +79,19 @@ export const VariationRenderForm = ({
         {value.oneOf.map((option: any, idx: number) => {
           if (option.type === "object") {
             return (
-              <>
+              <React.Fragment key={`${rootKey}-oneOf-${idx}`}>
                 <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-                  <DialogContent className="max-w-[538px] w-full">
+                  <DialogContent className="w-[90%] md:max-w-[538px]">
                     <DialogHeader>
                       <DialogTitle>
-                        <p className="text-Gray-900 text-lg font-semibold">
+                        <span className="text-Gray-900 text-lg font-semibold">
                           Add Custom option
-                        </p>
+                        </span>
                       </DialogTitle>
                       <DialogDescription>
-                        <p className="text-Gray-600 font-normal text-sm">
+                        <span className="text-Gray-600 font-normal text-sm">
                           You can add your custom option
-                        </p>
+                        </span>
                       </DialogDescription>
                     </DialogHeader>
                     <div
@@ -132,7 +132,7 @@ export const VariationRenderForm = ({
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-              </>
+              </React.Fragment>
             );
           }
 

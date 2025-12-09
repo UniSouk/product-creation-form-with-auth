@@ -146,7 +146,7 @@ function PublishChannelDataGrid({
   const setUpdatedVariants = variantStore.setUpdatedVariants;
   const {
     discountedPrice,
-    inventoryStrategy,
+    inventoryStrategy="UNIFIED",
     productListError,
     setProductListError,
     setPublishChannel,
@@ -171,7 +171,7 @@ function PublishChannelDataGrid({
 
   const variantFetch = async () => {
     const { data } = await productApi.get(
-      `/option/schema?ptype=${productTypeName}&gender=${gender}`,
+      `/api/schema/default?type=${productTypeName}&gender=${gender}`,
     );
     return data;
   };
@@ -990,14 +990,14 @@ function PublishChannelDataGrid({
     return (
       <div className="flex flex-col items-center">
         <div
-          className={`!w-10 !h-10 flex justify-center items-center`}
+          className={`w-101 h-10! flex justify-center items-center`}
           onClick={(e) => handleRowImageClick(rowId, e)}
         >
           {rowAssets.length > 0 && rowAssets[0].assetUrl ? (
             <div className="flex items-center justify-center w-10 h-10">
               <div className="relative w-full h-full rounded-lg overflow-hidden">
                 <Image
-                  src={rowAssets[0].assetUrl} // URL or local import
+                  src={rowAssets[0].assetUrl}
                   alt=""
                   fill
                   style={{ objectFit: "cover" }}
@@ -1891,7 +1891,7 @@ function PublishChannelDataGrid({
 
     return allValues.join(" / ");
   };
-
+  
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-center">

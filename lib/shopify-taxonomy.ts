@@ -67,7 +67,6 @@ class TaxonomyCache {
       return null; // Cache is still valid
     }
 
-    console.info("🔄 Loading taxonomy data from file...");
     const startTime = Date.now();
 
     const fileContent = fs.readFileSync(this.filePath, "utf8");
@@ -76,12 +75,10 @@ class TaxonomyCache {
     this.lastModified = currentModified;
     this.isInitialized = true;
 
-    console.info(`✅ Taxonomy data loaded in ${Date.now() - startTime}ms`);
     return taxonomyData;
   }
 
   private buildCategoryIndex(data: any): void {
-    console.info("🔄 Building category index...");
     const startTime = Date.now();
 
     this.cache.clear();
@@ -113,13 +110,9 @@ class TaxonomyCache {
         }
       }
     }
-
-    console.info(`✅ Category index built in ${Date.now() - startTime}ms`);
-    console.info(`📊 Indexed ${this.cache.size} categories`);
   }
 
   private buildAttributesIndex(data: any): void {
-    console.info("🔄 Building attributes index...");
     const startTime = Date.now();
 
     this.attributesCache.clear();
@@ -131,9 +124,6 @@ class TaxonomyCache {
         }
       }
     }
-
-    console.info(`✅ Attributes index built in ${Date.now() - startTime}ms`);
-    console.info(`📊 Indexed ${this.attributesCache.size} attributes`);
   }
 
   private enrichCategoryAttributes(
@@ -215,7 +205,7 @@ class TaxonomyCache {
         this.buildAttributesIndex(taxonomyData);
       }
     } catch (error) {
-      console.error("❌ Failed to initialize taxonomy cache:", error);
+      console.error("Failed to initialize taxonomy cache:", error);
       throw error;
     }
   }
@@ -290,9 +280,7 @@ class TaxonomyCache {
 
   // Method to preload cache (useful for startup optimization)
   public async preload(): Promise<void> {
-    console.info("🚀 Preloading taxonomy cache...");
     await this.ensureCacheLoaded();
-    console.info("✅ Taxonomy cache preloaded");
   }
 }
 

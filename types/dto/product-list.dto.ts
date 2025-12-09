@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { PaginationDto, OrderBy } from './pagination.dto';
 

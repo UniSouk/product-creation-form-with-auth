@@ -24,7 +24,6 @@ function ProductStatus() {
   }, [productStatus]);
 
   const handleStatus = (val: string) => {
-    console.log("vlll: ", val);
     setProductStatus(val);
   };
 
@@ -38,9 +37,6 @@ function ProductStatus() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [singleProductData?.status]);
-
-  console.log("productStatus: ", productStatus)
-
 
   return (
     <div className="bg-white md:p-6 p-3 py-4 rounded-xl border border-Gray-200 shadow-xs flex flex-col md:gap-5 gap-2.5">

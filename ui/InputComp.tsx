@@ -125,7 +125,7 @@ const InputComp = <TFieldValues extends FieldValues = FieldValues>({
 
           {endSymbol && !error && (
             <Image
-              src={endSymbol} // local import or URL
+              src={endSymbol}
               alt="symbolic-icon"
               width={24} // specify width
               height={24} // specify height

@@ -134,7 +134,6 @@ function ProductVariants() {
     setProductVariant(variants);
   }, [variants]);
 
-
   return (
     <div className="flex flex-col">
       <div

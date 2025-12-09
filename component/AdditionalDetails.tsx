@@ -24,7 +24,7 @@ function AdditionalDetails() {
   
   <div className="w-full md:w-fit">
     <button
-      disabled={isEnable}
+      // disabled={isEnable}
       type="button"
       onClick={() => setOpen(true)}
       className={cn(

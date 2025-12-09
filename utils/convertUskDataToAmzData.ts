@@ -346,35 +346,33 @@ export const transformSchema = async (schema) => {
 // });
 
 export const convertUskDataToAmzData = (uskData, uskSchema) => {
-  const allKeys = Object.keys(uskSchema?.properties);
+  if (!uskSchema?.properties) return {}; // early return if schema or properties is missing
+
+  const allKeys = Object.keys(uskSchema.properties);
 
   const flattenedKeys = new Set(
-    allKeys.filter((key) => {
-      return uskSchema.properties[key].type !== "array";
-    }),
+    allKeys.filter((key) => uskSchema.properties[key]?.type !== "array")
   );
 
   const unflattenedKeys = new Set(
-    allKeys.filter((key) => {
-      return uskSchema.properties[key].type === "array";
-    }),
+    allKeys.filter((key) => uskSchema.properties[key]?.type === "array")
   );
 
   const flattenedAttr = tranformObject(
-    Object.keys(uskData).reduce((acc, key) => {
+    Object.keys(uskData || {}).reduce((acc, key) => {
       if (flattenedKeys.has(key)) {
         acc[key] = uskData[key];
       }
       return acc;
     }, {}),
-    "language_tag",
+    "language_tag"
   );
 
-  const unflattenedAttr = unflatten(flattenedAttr, {
+  const unflattenedAttr = unflatten(flattenedAttr || {}, {
     delimiter: "/",
   });
 
-  const arrayAttr = Object.keys(uskData).reduce((acc, key) => {
+  const arrayAttr = Object.keys(uskData || {}).reduce((acc, key) => {
     if (unflattenedKeys.has(key)) {
       acc[key] = uskData[key];
     }
@@ -386,6 +384,7 @@ export const convertUskDataToAmzData = (uskData, uskSchema) => {
     ...arrayAttr,
   };
 };
+
 
 // const result = convertUskDataToAmzData(
 //   {
@@ -417,9 +416,7 @@ export const convertUskDataToAmzData = (uskData, uskSchema) => {
 // );
 
 
-export const convertAmzDataToUskData = (amzData, amzSchema) => {
-  console.log(amzData,amzSchema);
-  
+export const convertAmzDataToUskData = (amzData, amzSchema) => {  
   const unflattenedKeys = new Set(
     Object.keys(amzSchema.properties).filter((key) => {
       const property = amzSchema.properties[key];

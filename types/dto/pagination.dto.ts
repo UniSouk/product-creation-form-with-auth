@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { Transform } from 'class-transformer';
 import {
   IsEnum,

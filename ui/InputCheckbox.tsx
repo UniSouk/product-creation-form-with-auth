@@ -10,9 +10,9 @@ type InputCheckboxPropType = {
 
 function InputCheckbox({
   inputId,
-  checked,
+  checked=false,
   onChange,
-  value,
+  value="",
   disabled
 }: InputCheckboxPropType) {
   return (
@@ -29,7 +29,7 @@ function InputCheckbox({
           disabled={disabled}
           value={value}
         />
-        <span className={cn("absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2")}>
+        <span className={cn(`absolute text-white opacity-0 ${checked ? "opacity-100 bg-brand-600-orange-p-1 p-px rounded" : ""} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="12"

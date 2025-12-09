@@ -29,120 +29,151 @@ export async function POST(req: NextRequest) {
       return errorResponse("Validation failed", 400, validationResult.errors);
     }
 
-    const body = await req.json();
-    const { subCategory, attributeName, gender, brand, value } = body;
+    const { subCategory, attributeName, gender, brand, value } = reqBody;
 
-    const genderValue = gender ? gender : "N/A";
-    const brandValue = brand ? brand : "default";
+    const storeIdBigInt = BigInt(storeId);
 
-    const ptype = await prisma.subCategory.findFirst({
+    // Normalize inputs
+    const genderValue = gender || "N/A";
+    const brandValue = brand || "default";
+    const optionName =
+      attributeName.charAt(0).toUpperCase() + attributeName.slice(1);
+
+    const subCategoryData = await prisma.subCategory.findFirst({
       where: {
         name: subCategory,
         active: true,
-        OR: [{ storeId: null }, { storeId: BigInt(storeId) }],
+        OR: [{ storeId: null }, { storeId: storeIdBigInt }],
       },
-      select: {
-        attributes: true,
-        storeId: true,
-      },
+      select: { attributes: true, storeId: true },
     });
 
-    if (!ptype) {
+    if (!subCategoryData) {
       return NextResponse.json(
         { message: "Sub Category not found or inactive" },
         { status: 400 }
       );
     }
 
-    const attr = new Set(ptype.attributes as string[]);
+    const attributeSet = new Set(subCategoryData.attributes);
 
-    if (!attr.has(attributeName)) {
+    if (!attributeSet.has(attributeName)) {
       return NextResponse.json(
         { message: `No attribute found for ${attributeName}` },
         { status: 400 }
       );
     }
 
-    const variantOptionOnSubCategory =
+    const existingConnection =
       await prisma.variantOptionOnSubCategory.findFirst({
-        //@ts-ignore
-        relationLoadStrategy: "join",
         where: {
-          OR: [{ storeId: null }, { storeId: BigInt(storeId) }],
+          OR: [{ storeId: null }, { storeId: storeIdBigInt }],
           typeName: subCategory,
           variantOption: {
-            OR: [{ storeId: null }, { storeId: BigInt(storeId) }],
+            OR: [{ storeId: null }, { storeId: storeIdBigInt }],
             brand: brandValue,
             gender: genderValue,
             attributeName: attributeName,
           },
         },
-        include: {
-          variantOption: true,
-        },
+        include: { variantOption: true },
       });
-
-    const variantOption = variantOptionOnSubCategory
-      ? variantOptionOnSubCategory.variantOption
-      : null;
-
-    let result;
 
     const alphabet: string =
       "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let result: unknown;
 
-    if (variantOption) {
-      // Update variant values if exists
+    if (existingConnection?.variantOption) {
+      // Update existing variant option
+      const variantOption = existingConnection.variantOption;
+
       if (!variantOption.editable) {
-        return NextResponse.json(
-          { message: "Options value not editable" },
-          { status: 400 }
-        );
+        throw new Error("Options value not editable");
       }
 
       const existingValues = variantOption.values as Array<any>;
-      const updatedValues = [
-        ...existingValues,
-        { id: customAlphabet(alphabet, 16), ...value },
-      ];
+      const newValue = { id: customAlphabet(alphabet, 16)(), ...value };
+
+      const updatedValues = [...existingValues, newValue];
 
       result = await prisma.variantOption.update({
         where: { id: variantOption.id },
         data: { values: updatedValues },
       });
-
-      // TODO: Add Audit Log (Kafka)
     } else {
-      const newValues = [
-        { id: customAlphabet(alphabet, 16), ...value },
-      ] as Array<any>;
-
+      // Create new variant option with connection
       const relationStoreId =
-        ptype.storeId === null ? null : BigInt(ptype.storeId);
+        subCategoryData.storeId === null ? null : subCategoryData.storeId;
+      const newValue = { id: customAlphabet(alphabet, 16)(), ...value };
+      const newValues = [newValue];
 
-      result = await prisma.variantOption.create({
-        data: {
-          storeId: BigInt(storeId),
-          name: attributeName.charAt(0).toUpperCase() + attributeName.slice(1),
-          brand: brandValue,
-          gender: genderValue,
-          attributeName: attributeName,
-          values: newValues,
-          editable: true,
-          subCategory: {
-            create: {
-              typeName: subCategory,
-              storeId: relationStoreId,
+      // Use transaction for atomic operations
+      await prisma.$transaction(async (tx) => {
+        // Get or create variant option
+        let variantOption = await tx.variantOption.findUnique({
+          where: {
+            name_storeId: {
+              name: optionName,
+              storeId: storeIdBigInt,
             },
           },
-        },
+        });
+
+        if (variantOption) {
+          variantOption = await tx.variantOption.update({
+            where: { id: variantOption.id },
+            data: {
+              brand: brandValue,
+              gender: genderValue,
+              values: newValues,
+            },
+          });
+        } else {
+          variantOption = await tx.variantOption.create({
+            data: {
+              storeId: storeIdBigInt,
+              name: optionName,
+              brand: brandValue,
+              gender: genderValue,
+              attributeName,
+              values: newValues,
+              editable: true,
+            },
+          });
+        }
+
+        // Create connection if it doesn't exist
+        const existingConnection =
+          await tx.variantOptionOnSubCategory.findFirst({
+            where: {
+              typeName: subCategory,
+              variantOptionId: variantOption.id,
+              storeId: relationStoreId,
+            },
+          });
+
+        if (!existingConnection) {
+          await tx.variantOptionOnSubCategory.create({
+            data: {
+              typeName: subCategory,
+              variantOptionId: variantOption.id,
+              storeId: relationStoreId,
+            },
+          });
+        }
+
+        result = variantOption;
       });
 
-      // TODO: Add Audit Log (Kafka)
+      // Fetch complete result with relations
+      result = await prisma.variantOption.findUnique({
+        where: { id: (result as any).id },
+        include: { subCategory: true },
+      });
     }
 
     return NextResponse.json({
-      message: variantOption ? "Option updated" : "Option created",
+      message: "variant option created successfully",
       data: result,
     });
   } catch (error) {

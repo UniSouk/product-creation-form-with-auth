@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { IsNotEmpty, IsObject, IsOptional, IsString } from "class-validator";
 
 export class CreateOptionDto {

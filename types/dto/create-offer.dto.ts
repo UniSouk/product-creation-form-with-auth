@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { IsEnum, IsInt, IsNotEmpty, IsString } from "class-validator";
 import { ChannelType } from "@prisma/client";
 

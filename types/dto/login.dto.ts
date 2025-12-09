@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { IsEmail, IsString, MinLength } from "class-validator";
 
 export class LoginDto {

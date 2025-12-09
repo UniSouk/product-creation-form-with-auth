@@ -146,7 +146,7 @@ function ProductForm() {
   // submit handle async function
   const submitHandleMutation = useMutation({
     mutationFn: async (payload: ProductPayloadType) => {
-      const { data } = await productApi.post("/product", payload, {
+      const { data } = await productApi.post("/api/products", payload, {
         headers: {
           "x-store-id": storeId,
         },
@@ -156,10 +156,8 @@ function ProductForm() {
     onSuccess: (data) => {
       successToast(data.message || "Product created");
       discardHandle();
-      // navigate({
-      //   from: "/product/product_create",
-      //   to: "/product",
-      // });
+      router.push("/dashboard");
+      successToast("Product Created Successfully")
     },
     onError: (error: unknown) => {
       if (error instanceof AxiosError && error.response) {
@@ -458,7 +456,6 @@ function ProductForm() {
 
       if (!allIssuesFlattened.length) {
         setIsReviewClicked(true);
-        console.log("isReviewClicked: ", isReviewClicked);
         successToast("No issues found for this product.");
       } else {
         setShowProductErrorReport(true);
@@ -498,8 +495,8 @@ function ProductForm() {
         monthOfManufactureOrPacking: manufactureMonth || "",
       },
       description: description ?? "",
-      inventoryStrategy: inventoryStrategy ?? "",
-      priceStrategy: inventoryStrategy ?? "",
+      inventoryStrategy: inventoryStrategy ?? "UNIFIED",
+      priceStrategy: inventoryStrategy ?? "UNIFIED",
       hsnCode: hsnCode ?? "",
       categoryId: categoryValue ?? "",
       subCategoryId: productTypeValue ?? "",
@@ -571,7 +568,7 @@ function ProductForm() {
     setOndcExtraData({});
     setAmazonExtraData({});
     setShopifyExtraData({});
-    if (nav) router.push("/product");
+    if (nav) router.push("/dashboard");
   };
 
   // ============================== edit single product===========================
@@ -586,13 +583,13 @@ function ProductForm() {
     <form>
       <div className="bg-Gray-25 pb-7">
         {/* heading */}
-        <div className="flex flex-col items-start md:z-30 z-10 sticky sm:top-0 top-[52px] bg-Gray-25 py-12">
+        <div className="flex flex-col items-start md:z-30 z-10 fixed max-md:w-full max-md:px-3 max-md:-ml-4 md:sticky top-16 sm:top-0 bg-Gray-50 max-md:mt-2 md:pb-10">
           <div className="flex justify-between items-start w-full mt-1">
             <div className="flex flex-col gap-1">
               <h1 className="text-Gray-900 md:text-3xl text-lg font-semibold">
                 {singleProductData.id ? "Edit" : "Add"} Product
               </h1>
-              <p className="text-sm hidden md:block -text-Gray-500">
+              <p className="text-sm hidden md:block text-Gray-500">
                 Get your product listed easily by providing the details below.
               </p>
             </div>
@@ -616,7 +613,7 @@ function ProductForm() {
                 type="button"
                 onClick={submitHandle}
                 disabled={submitBtnDisable}
-                className="px-4 py-2 bg-brand-600-orange-p-1 rounded-lg border -border-brand-600-orange-p-1 shadow-shadow-xs text-sm font-semibold text-white hover:-bg-Brand-700 focus:-bg-brand-600-orange-p-1 transition-all duration-300 ease-in-out disabled:-bg-Gray-100 disabled:-text-Gray-400 disabled:-border-Gray-200"
+                className="px-4 py-2 rounded-lg border bg-brand-600-orange-p-1 border-brand-600-orange-p-1 shadow-shadow-xs text-sm font-semibold text-white hover:bg-Brand-700 focus:bg-brand-600-orange-p-1 transition-all duration-300 ease-in-out disabled:bg-Gray-100 disabled:text-Gray-400 disabled:border-Gray-200"
               >
                 {singleProductData.id ? "Update" : "Save"}
               </button>
@@ -674,7 +671,7 @@ function ProductForm() {
         {/*prduct add form*/}
         <div className="grid grid-cols-1 md:grid-cols-[2fr_minmax(0,1.2fr)] gap-5">
           {/* Show images first on mobile, second on desktop */}
-          <div className="md:hidden flex flex-col gap-2">
+          <div className="md:hidden flex flex-col gap-2 mt-16">
             <div className="bg-white md:p-6 p-3 rounded-xl border -border-Gray-200 shadow-shadow-xs">
               <div className="flex flex-col gap-5">
                 <LabelComp
@@ -728,10 +725,11 @@ function ProductForm() {
             {/* <AlertQuantity /> */}
             {/* Variants */}
             {/* {isVariant && <ProductVariants />} */}
-            {variationEnabler && !singleProductData.id && <VariantionsRender />}
+            {variationEnabler && !singleProductData.id && isVariant && <VariantionsRender />}
 
             {/* publishing channels */}
             {isVariant ? <ChannelPublishing /> : <ChannelPublishingBasics />}
+            {/* {isVariant && <ChannelPublishing /> } */}
             {/* additional details enable */}
             <AdditionalDetails />
           </div>

@@ -123,7 +123,7 @@ export async function seedOptions(tx: any) {
         attributeName: attr,
         values: seedData[gender].values.map((v: any) => ({
           ...v,
-          id: customAlphabet(alphabet, 10),
+          id: customAlphabet(alphabet, 10)(),
         })),
       });
     }
@@ -161,7 +161,7 @@ export async function seedOptions(tx: any) {
     //@ts-ignore
     values: colorDefaults.values.map((v) => ({
       ...v,
-      id: customAlphabet(alphabet, 10),
+      id: customAlphabet(alphabet, 10)(),
     })),
   });
 

@@ -23,7 +23,7 @@ function ChannelPublishing() {
     productListError,
     productInventory,
     singleProductData,
-    enabledChannels,
+    enabledChannels= ["AMAZON_IN", "WIX", "WOOCOMMERCE", "ONDC", "SHOPIFY"],
   } = useProductStore();
   const { setVariants } = useVariationStore();
 

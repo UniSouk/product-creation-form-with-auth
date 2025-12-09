@@ -220,7 +220,7 @@ function ImageListedModal({
 
   const assetsUrlsListMutation = useMutation({
     mutationFn: async (payload) => {
-      const { data } = await productApi.post("/asset/all", payload, {
+      const { data } = await productApi.post("/api/asset/all", payload, {
         headers: {
           "x-store-id": storeId,
         },
@@ -232,7 +232,7 @@ function ImageListedModal({
   //  create assets api
   const { mutateAsync: createAsset } = useMutation({
     mutationFn: async (payload: CreateAssetType) => {
-      const res = await productApi.post(`/asset`, payload, {
+      const res = await productApi.post(`/api/asset`, payload, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -279,7 +279,7 @@ function ImageListedModal({
   //update assets api
   const { mutate: updateAsset } = useMutation({
     mutationFn: async (payload: UpdateAssetType) => {
-      const res = await productApi.patch(`/asset`, payload, {
+      const res = await productApi.patch(`/api/asset`, payload, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -307,7 +307,7 @@ function ImageListedModal({
   // Delete assets api
   const { mutate: deleteAsset } = useMutation({
     mutationFn: async (payload: UpdateAssetType) => {
-      const res = await productApi.delete(`/asset`, {
+      const res = await productApi.delete(`/api/asset`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -672,7 +672,7 @@ function ImageListedModal({
         e.preventDefault();
       }}
       hidecross="true"
-      className="lg:min-w-[1006px] min-w-full p-6 gap-8 flex flex-col h-fit"
+      className="w-[90%] lg:min-w-[1006px] md:min-w-full md:p-6 gap-8 flex flex-col h-fit"
     >
       {/* <DialogClose
         className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"

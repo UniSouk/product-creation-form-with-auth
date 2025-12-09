@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import InputComp from "@/ui/InputComp";
 import LabelComp from "@/ui/LabelComp";
-import RupeeIcon from "@/assets/icons/RupeeTcon";
+import RupeeIcon from "@/assets/images/currency-rupee-circle.svg";
 import InfoIcon from "@/assets/icons/InfoIcon";
 import InputCheckbox from "@/ui/InputCheckbox";
 import { z, ZodType } from "zod";
@@ -104,7 +104,7 @@ function ProductPricing() {
   const fetchEanValidation = async (value: string) => {
     try {
       const { data } = await api.get(
-        `/product/external-product-identifier?type=EAN&value=${value}`,
+        `/api/external-product-identifier?type=EAN&value=${value}`,
       );
       return data;
     } catch (error) {
@@ -274,7 +274,7 @@ useEffect(() => {
             name="price"
             inputid="price"
             register={register}
-            StartIcon={<RupeeIcon />}
+            startSymbol={RupeeIcon}
             error={errors.price}
             // value={productPrice as string}
           />
@@ -292,7 +292,7 @@ useEffect(() => {
             name="compareprice"
             inputid="compareprice"
             register={register}
-            StartIcon={<RupeeIcon/>}
+            startSymbol={RupeeIcon}
             EndIcon={<InfoIcon />}
             tooltip={true}
             error={errors.compareprice}
@@ -306,6 +306,7 @@ useEffect(() => {
           inputId="samePrice"
           value="samePrice"
           onChange={samePriceHandle}
+          checked={isPriceSameAllChannel}
         />
         <LabelComp
           htmlfor="samePrice"

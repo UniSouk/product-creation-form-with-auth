@@ -16,7 +16,7 @@ function VariantionsRender() {
 
   const variantFetch = async () => {
     const { data } = await productApi.get(
-      `/option/schema?ptype=${productTypeName}&gender=${gender}`,
+      `/api/schema/default?type=${productTypeName}&gender=${gender}`,
     );
     return data;
   };

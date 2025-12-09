@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { ExternalProductIdType } from "@prisma/client";
 import { IsNotEmpty, IsString } from "class-validator";
 

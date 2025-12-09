@@ -119,7 +119,7 @@ export const useProductStore = create<ProductStoreType>((set, get) => ({
   },
 
   // Inventory selection
-  inventoryStrategy: null,
+  inventoryStrategy: "UNIFIED",
   setinventoryStrategy(value) {
     set((state) => ({
       ...state,
@@ -488,7 +488,7 @@ export const useProductStore = create<ProductStoreType>((set, get) => ({
   },
 
   // ennabled channels
-  enabledChannels: [],
+  enabledChannels: ["AMAZON", "WIX", "WOO-COMMERCE", "ONDC", "SHOPIFY"],
   setEnabledChannels(val) {
     set((state) => ({
       ...state,

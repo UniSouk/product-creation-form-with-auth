@@ -1,8 +1,27 @@
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { customAlphabet } from "nanoid";
 import * as fs from "node:fs";
+import { Pool } from "pg";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
+
+// Create a shared Postgres pool and Prisma adapter
+const pool = new Pool({
+  connectionString: "",
+});
+
+const adapter = new PrismaPg(pool);
+
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    adapter,
+    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+  });
 
 const alphabet: string =
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

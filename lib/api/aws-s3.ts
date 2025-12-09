@@ -25,14 +25,10 @@ export const getPreSignedUrl = async (key: string): Promise<string> => {
   const presignedUrl = await getSignedUrl(
     new S3Client({
       region: env.AWS_REGION,
-      credentials: {
-        accessKeyId: env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-      },
     }),
     command,
     {
-      expiresIn: env.S3_SIGNED_URL_EXPIRY_TIME,
+      expiresIn: Number(env.S3_SIGNED_URL_EXPIRY_TIME),
     }
   );
 
@@ -51,14 +47,10 @@ export const getFileUrl = async (uri: string) => {
     const presignedUrl = await getSignedUrl(
       new S3Client({
         region: env.AWS_REGION,
-        credentials: {
-          accessKeyId: env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-        },
       }),
       command,
       {
-        expiresIn: env.S3_SIGNED_URL_EXPIRY_TIME,
+        expiresIn: Number(env.S3_SIGNED_URL_EXPIRY_TIME),
       }
     );
 

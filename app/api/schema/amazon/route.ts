@@ -131,6 +131,7 @@ export async function GET(request: NextRequest) {
     );
     return NextResponse.json(result);
   } catch (error) {
+    console.error("Error ",error);
     return handleApiError(error);
   }
 }

@@ -237,8 +237,6 @@ function DynamicFormsRenderComp({
     }
   }, [Schema]);
 
-  console.log("amazon");
-
   return (
     <>
       {schema && (

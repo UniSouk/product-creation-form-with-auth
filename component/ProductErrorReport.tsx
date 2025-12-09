@@ -22,15 +22,14 @@ const ProductErrorReport = ({
 }: {
   errorProductData: VerificationError[];
 }) => {
-  console.log("errorProductData: ", errorProductData);
   return (
     <div className="w-full rounded-xl border -border-Error-100 -bg-Error-25 p-6">
       <div className="flex items-start gap-3">
         <div className="p-2 -bg-Error-25 rounded-full">
-          <div className="relative flex items-center justify-center flex-shrink-0">
+          <div className="relative flex items-center justify-center shrink-0">
             <div className="absolute rounded-full border-[2.4px] border-[#f1a098] w-7 h-7"></div>
             <div className="absolute rounded-full border-[2.2px] border-[#fadedb] w-10 h-10"></div>
-            <InfoIcon className="text-[#D92D20] w-5 h-5" />
+            <InfoIcon className="text-Error-600 w-5 h-5" />
           </div>
         </div>
 

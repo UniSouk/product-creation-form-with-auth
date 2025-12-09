@@ -5,6 +5,7 @@ import { handleApiError } from "@/lib/api/error-handler";
 import bcrypt from "bcryptjs";
 import type { RegisterRequest } from "@/types/api";
 import { ChannelType } from "@prisma/client";
+import { signAccessToken, signRefreshToken } from "@/lib/auth-tokens";
 
 export async function POST(request: NextRequest) {
   try {
@@ -56,7 +57,23 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      return { user, storeId: store.id };
+      const accessToken = signAccessToken(String(user.id), user.email);
+      const refreshToken = signRefreshToken(String(user.id), user.email);
+
+      // Store refresh token
+      const decodedRefresh = JSON.parse(
+        Buffer.from(refreshToken.split(".")[1], "base64").toString("utf8")
+      ) as { exp: number };
+
+      await tx.refreshToken.create({
+        data: {
+          token: refreshToken,
+          userId: user.id,
+          expiresAt: new Date(decodedRefresh.exp * 1000),
+        },
+      });
+
+      return { accessToken, refreshToken, user, storeId: store.id };
     });
 
     return successResponse(res, "User registered successfully", 201);

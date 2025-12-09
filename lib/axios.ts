@@ -5,12 +5,11 @@ import {
   wixBaseUrl,
 } from "@/constant";
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { getStoreId, removeAllCookies } from "./cookies";
+import { getRefreshToken, getStoreId, getAccessToken, removeAllCookies } from "./cookies";
 
-// const accessToken = getToken();
 // in-memory storage for access token
-let accessToken: string | null = null;
-// const storeId = getStoreId();
+// Initialize from cookies if available (for page refresh persistence)
+let accessToken: string | null = getAccessToken() || null;
 
 export const setAccessToken = (token: string | null) => {
   accessToken = token;
@@ -26,15 +25,16 @@ const refreshTokenSingleton = async () => {
     return refreshTokenPromise;
   }
 
-  console.log("BASE_URL ==>", BASE_URL);
-
-  if (!BASE_URL) {
-  throw new Error("❌ BASE_URL is missing in environment variables.");
-}
+  // Get fresh values from cookies each time
+  const refreshToken = getRefreshToken();
+  const storeId = getStoreId();
 
   // Otherwise, create a new refresh promise
   refreshTokenPromise = axios
-    .get(`${BASE_URL}/auth/refresh`, { withCredentials: true })
+    .post(`${BASE_URL}/api/auth/refresh`, {
+      refreshToken,  // <-- Dynamically retrieved from cookies
+      storeId,       // <-- Dynamically retrieved from cookies
+    })
     .then((response) => {
       // Set the new access token
       const newAccessToken = response.data.data.accessToken;
@@ -61,7 +61,7 @@ export const api = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    "x-store-id": "113947194574972928",
+    "x-store-id": getStoreId(),
   },
   withCredentials: true,
 });
@@ -113,7 +113,11 @@ export const support = axios.create({
 const requestConfig = (config: InternalAxiosRequestConfig<any>) => {
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
-    config.headers["x-store-id"] = "113947194574972928";
+  }
+  // Always set x-store-id from cookies if available
+  const storeId = getStoreId();
+  if (storeId) {
+    config.headers["x-store-id"] = storeId;
   }
   return config;
 };
@@ -203,21 +207,3 @@ export const ondcApi = axios.create({
 ondcApi.interceptors.request.use(requestConfig, requestError);
 ondcApi.interceptors.response.use(responseConfig, responseError);
 
-export const updateApiHeaders = () => {
-  // api.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  // api.defaults.headers["x-store-id"] = getStoreId() ?? "";
-  // anotherAPi.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  // anotherAPi.defaults.headers["x-store-id"] = getStoreId() ?? "";
-  // coreApi.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  // coreApi.defaults.headers["x-store-id"] = getStoreId() ?? "";
-  // productApi.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  // productApi.defaults.headers["x-store-id"] = getStoreId() ?? "";
-  // analyticsApi.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  // analyticsApi.defaults.headers["x-store-id"] = getStoreId() ?? "";
-  // ondcApi.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  // ondcApi.defaults.headers["x-store-id"] = getStoreId() ?? "";
-  // razorPayApi.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  // razorPayApi.defaults.headers["x-store-id"] = getStoreId() ?? "";
-  // auditLogApi.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  // auditLogApi.defaults.headers["x-store-id"] = getStoreId() ?? "";
-};

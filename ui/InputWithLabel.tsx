@@ -53,7 +53,7 @@ function InputWithLabel({
           <div className="flex gap-2 w-full">
             <input
               disabled={disabled}
-              value={value ?? ""}
+              value={typeof value === "number" && !isNaN(value) ? value : ""}
               type="number"
               className="input w-full focus-visible:outline-none disabled:bg-Gray-50 disabled:placeholder:bg-Gray-50 disabled:text-Gray-400"
               placeholder={placeholder}

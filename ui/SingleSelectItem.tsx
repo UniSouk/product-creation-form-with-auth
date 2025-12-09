@@ -1,5 +1,8 @@
 /* eslint-disable */
 // @ts-nocheck
+
+"use client";
+
 import { memo, useEffect, useRef, useState } from "react";
 import ChevronDownIcon from "@/assets/icons/ChevronDownIcon";
 import { cn } from "@/lib/utils";

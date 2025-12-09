@@ -3,7 +3,7 @@ import InputCheckbox from "@/ui/InputCheckbox";
 import InputComp from "@/ui/InputComp";
 import InputWithLabel from "@/ui/InputWithLabel";
 import LabelComp from "@/ui/LabelComp";
-import RupeeIcon from "@/assets/icons/RupeeTcon";
+import RupeeIcon from "@/assets/images/currency-rupee-circle.svg";
 import { useProductStore } from "@/store/ProductStore";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -63,7 +63,7 @@ function ChannelPublishingBasics() {
     publishChannel,
     isPriceSameAllChannel,
     singleProductData,
-    enabledChannels,
+    enabledChannels = ["AMAZON_IN", "WIX", "WOOCOMMERCE", "ONDC", "SHOPIFY"],
     eanNumberCode,
   } = useProductStore();
 
@@ -982,7 +982,7 @@ function ChannelPublishingBasics() {
                   name="ondcPrice"
                   inputid="ondcPrice"
                   register={register}
-                  StartIcon={<RupeeIcon />}
+                  startSymbol={RupeeIcon}
                   error={errors.ondcPrice}
                   className="h-[46px]"
                   value={isPriceSameAllChannel ? productPrice : undefined}
@@ -1070,7 +1070,7 @@ function ChannelPublishingBasics() {
                   name="defaultPrice"
                   inputid="defaultPrice"
                   register={register}
-                  StartIcon={<RupeeIcon />}
+                  startSymbol={RupeeIcon}
                   className="h-[46px]"
                   error={errors.defaultPrice}
                   rules={{
@@ -1158,7 +1158,7 @@ function ChannelPublishingBasics() {
                   name="amazonPrice"
                   inputid="amazonPrice"
                   register={register}
-                  StartIcon={<RupeeIcon/>}
+                  startSymbol={RupeeIcon}
                   error={errors.amazonPrice}
                   className="h-[46px]"
                   value={isPriceSameAllChannel ? productPrice : undefined}
@@ -1242,7 +1242,7 @@ function ChannelPublishingBasics() {
                   name="wooCommercePrice"
                   inputid="wooCommercePrice"
                   register={register}
-                  StartIcon={<RupeeIcon />}
+                  startSymbol={RupeeIcon}
                   error={errors.wooCommercePrice}
                   className="h-[46px]"
                   value={isPriceSameAllChannel ? productPrice : undefined}
@@ -1326,7 +1326,7 @@ function ChannelPublishingBasics() {
                   name="shopifyPrice"
                   inputid="shopifyPrice"
                   register={register}
-                  StartIcon={<RupeeIcon />}
+                  startSymbol={RupeeIcon}
                   error={errors.shopifyPrice}
                   className="h-[46px]"
                   value={isPriceSameAllChannel ? productPrice : undefined}
@@ -1405,7 +1405,7 @@ function ChannelPublishingBasics() {
                 name="wixPrice"
                 inputid="wixPrice"
                 register={register}
-                StartIcon={<RupeeIcon />}
+                startSymbol={RupeeIcon}
                 error={errors.wixPrice}
                 className="h-[46px]"
                 value={isPriceSameAllChannel ? productPrice : undefined}

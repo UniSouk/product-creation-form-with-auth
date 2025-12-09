@@ -21,7 +21,7 @@ const showToast = (
   // Show the toast with appropriate styling based on type
   const toastId = toast(component, {
     ...options,
-    className: `${options.type || ""}-toast`, // Add class for custom styling
+    className: `${options.type || ""}-toast custom-no-icon`, // Add class for custom styling
   });
 
   activeToastIds.push(toastId as string);

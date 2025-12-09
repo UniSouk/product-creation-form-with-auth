@@ -79,7 +79,7 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
       throw new Error("Domain or category is missing");
     }
     const { data } = await ondcApi.get(
-      `/schema?type=${ondcMetadata?.category}`,
+      `/api/schema/ondc?type=${ondcMetadata?.category}`,
     );
     return data;
   };
@@ -105,7 +105,7 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
   // shopify
   const shopifySchemaFetch = async () => {
     const { data } = await shopifyApi.get(
-      `/ecom/shopify/category/attributes?categoryId=${shopifyMetadata?.categoryId}`,
+      `/api/schema/shopify?type=${shopifyMetadata?.categoryId}`,
       {
         headers: { "x-store-id": getStoreId() },
       },
@@ -124,10 +124,7 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
     enabled: activeTab === "SHOPIFY",
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-  });
-
-  console.log(shopifyData);
-  
+  });  
 
   //  amazon
 
@@ -135,7 +132,7 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
     if (!amazonMetadata?.productType) {
       throw new Error("Product type is missing");
     }
-    const { data } = await api.get(`/ptype/${amazonMetadata?.productType}`, {
+    const { data } = await api.get(`/api/schema/amazon?type=${amazonMetadata?.productType}`, {
       headers: { "x-store-id": getStoreId() },
     });
     return data;
@@ -436,7 +433,7 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
   return (
     <>
       {open && (
-        <div className="fixed top-0 flex w-full h-screen bg-Gray-950 bg-opacity-70 backdrop-blur-sm z-40 left-0 justify-center items-center py-9 px-8">
+        <div className="fixed top-0 flex w-full h-[90vh] md:h-screen bg-Gray-950 bg-opacity-70 backdrop-blur-sm z-40 left-0 justify-center items-center py-9 px-3 md:px-8 max-md:mt-14">
           <div
             ref={popUpRef}
             className="bg-Gray-25 w-full h-full rounded-lg p-3 md:p-6 flex flex-col justify-between md:gap-8 gap-2"

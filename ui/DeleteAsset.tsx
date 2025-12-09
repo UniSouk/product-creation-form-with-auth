@@ -55,16 +55,16 @@ const DeleteAsset: FC<DeleteAssetProps> = ({
       <Dialog open={open} onOpenChange={closeOpen}>
         {React.cloneElement(children, { onClick: toggleOpen })}
 
-        <DialogContent className="overflow-clip min-w-[544px]">
+        <DialogContent className="overflow-clip w-[95%] md:min-w-[544px]">
           <DialogHeader>
             <DialogTitle>
               <div className="flex gap-4 z-10">
                 <AlertIcon />
                 <div>
-                  <div className="text-Gray-900 text-lg font-semibold max-w-[450px] mr-10">
+                  <div className="text-Gray-900 text-base md:text-lg font-semibold max-w-[450px] mr-10 max-md:text-left">
                     {heading}
                   </div>
-                  <div className="text-Gray-600 text-sm font-normal max-w-[350px] mt-1">
+                  <div className="text-Gray-600 text-sm font-normal max-w-[350px] mt-1 max-md:text-left">
                     {description}
                   </div>
                 </div>
