@@ -44,7 +44,6 @@ export type Env = {
   S3_BUCKET_NAME: string;
   S3_SIGNED_URL_EXPIRY_TIME: number;
   NEXTAUTH_SECRET: string;
-  NEXTAUTH_URL?: string;
   VAULT_URL: string;
   VAULT_SECRET_KEY: string;
   UNISOUK_STORE_ID: string;
