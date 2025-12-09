@@ -19,7 +19,7 @@ import SecondaryButton from "@/ui/SecondaryButton";
 import SwitchToggleButton from "@/ui/SwitchToggleButton";
 import { errorToast, successToast } from "@/ui/Toast";
 import VariantionsRender from "@/component/variation-component/VariantionsRender";
-import { api, productApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { getStoreId } from "@/lib/cookies";
 import { fetchStoreDetails } from "@/lib/getApis";
 import { cn } from "@/lib/utils";
@@ -146,7 +146,7 @@ function ProductForm() {
   // submit handle async function
   const submitHandleMutation = useMutation({
     mutationFn: async (payload: ProductPayloadType) => {
-      const { data } = await productApi.post("/api/products", payload, {
+      const { data } = await api.post("/api/products", payload, {
         headers: {
           "x-store-id": storeId,
         },
@@ -191,7 +191,7 @@ function ProductForm() {
       payload: ProductPayloadType;
       id: string;
     }) => {
-      const { data } = await productApi.patch("/product/" + id, payload, {
+      const { data } = await api.put("/product/" + id, payload, {
         headers: {
           "x-store-id": storeId,
         },

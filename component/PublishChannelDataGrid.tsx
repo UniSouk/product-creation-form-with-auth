@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 import TrashIcon from "@/assets/icons/TrashIcon";
 import PlusIcon from "@/assets/icons/PlusIcon";
 import AddVarinatModal from "./AddVarinatModal";
-import { productApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { PRODUCT_MAPPED_ARRRIBUTES } from "@/constant";
 import Image from "next/image";
@@ -170,7 +170,7 @@ function PublishChannelDataGrid({
   const [initialExpansionDone, setInitialExpansionDone] = useState(false);
 
   const variantFetch = async () => {
-    const { data } = await productApi.get(
+    const { data } = await api.get(
       `/api/schema/default?type=${productTypeName}&gender=${gender}`,
     );
     return data;

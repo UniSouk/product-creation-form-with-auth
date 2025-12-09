@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { Fragment, useEffect, useState } from "react";
 import EditIcon from "@/assets/icons/edit-02.svg";
 import { useProductStore } from "@/stores/ProductStore";
-import { productApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { successToast } from "./Toast";
 
 export interface OptionType {

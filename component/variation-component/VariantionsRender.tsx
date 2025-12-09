@@ -1,4 +1,4 @@
-import { productApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { cn } from "@/lib/utils";
 import { useProductStore } from "@/store/ProductStore";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ function VariantionsRender() {
    const [renderKey, setRenderKey] = useState(0);
 
   const variantFetch = async () => {
-    const { data } = await productApi.get(
+    const { data } = await api.get(
       `/api/schema/default?type=${productTypeName}&gender=${gender}`,
     );
     return data;

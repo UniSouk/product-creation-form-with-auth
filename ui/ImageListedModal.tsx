@@ -36,7 +36,7 @@ import { useEffect, useState } from "react";
 import DeleteAsset from "./DeleteAsset";
 import ImageUploadSection from "@/component/ImageUploadSection";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { productApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { getStoreId, getToken } from "@/lib/cookies";
 import { RowAssetsMapType } from "./PublishChannelDataGrid";
 import { set } from "date-fns";
@@ -220,7 +220,7 @@ function ImageListedModal({
 
   const assetsUrlsListMutation = useMutation({
     mutationFn: async (payload) => {
-      const { data } = await productApi.post("/api/asset/all", payload, {
+      const { data } = await api.post("/api/asset/all", payload, {
         headers: {
           "x-store-id": storeId,
         },
@@ -232,7 +232,7 @@ function ImageListedModal({
   //  create assets api
   const { mutateAsync: createAsset } = useMutation({
     mutationFn: async (payload: CreateAssetType) => {
-      const res = await productApi.post(`/api/asset`, payload, {
+      const res = await api.post(`/api/asset`, payload, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -279,7 +279,7 @@ function ImageListedModal({
   //update assets api
   const { mutate: updateAsset } = useMutation({
     mutationFn: async (payload: UpdateAssetType) => {
-      const res = await productApi.patch(`/api/asset`, payload, {
+      const res = await api.patch(`/api/asset`, payload, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -307,7 +307,7 @@ function ImageListedModal({
   // Delete assets api
   const { mutate: deleteAsset } = useMutation({
     mutationFn: async (payload: UpdateAssetType) => {
-      const res = await productApi.delete(`/api/asset`, {
+      const res = await api.delete(`/api/asset`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import DynamicFormsRenderComp from "./additional-details/DynamicFormsRenderComp";
 import CloseIcon from "@/assets/icons/CloseIcon";
 import { useProductStore } from "@/store/ProductStore";
-import { amazonSchemaApi, api, ondcApi, shopifyApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { errorToast } from "../ui/Toast";
@@ -78,7 +78,7 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
     if (!ondcMetadata?.domain || !ondcMetadata?.category) {
       throw new Error("Domain or category is missing");
     }
-    const { data } = await ondcApi.get(
+    const { data } = await api.get(
       `/api/schema/ondc?type=${ondcMetadata?.category}`,
     );
     return data;
@@ -104,7 +104,7 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
 
   // shopify
   const shopifySchemaFetch = async () => {
-    const { data } = await shopifyApi.get(
+    const { data } = await api.get(
       `/api/schema/shopify?type=${shopifyMetadata?.categoryId}`,
       {
         headers: { "x-store-id": getStoreId() },
@@ -157,7 +157,7 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
     if (!resourceUrl) {
       throw new Error("Resource URL is missing");
     }
-    const { data } = await amazonSchemaApi.get(resourceUrl, {
+    const { data } = await api.get(resourceUrl, {
       withCredentials: false,
     });
     return data;

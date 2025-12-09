@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 // import SelectComp from "@/components/ui/SelectComp";
 // import DescriptionTextEditor from "./DescriptionTextEditor";
 import { Countries } from "@/constant";
-import { productApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { useProductStore } from "@/store/ProductStore";
 import { ProductListErrorType } from "@/type/product-type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -74,7 +74,7 @@ const ProductDescriptionSchema = z.object({
 // category fetch
 
 const categoryFetch = async () => {
-  const { data } = await productApi.get("/api/category");
+  const { data } = await api.get("/api/category");
   return data;
 };
 

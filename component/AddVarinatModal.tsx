@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useProductStore } from "@/store/ProductStore";
-import { productApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { useEffect, useState } from "react";
 import { addVariantSchema } from "@/utils/addVariantsJsonSchema";
 import MainVariationcomp from "@/component/variation-component/MainVariationcomp";
@@ -351,7 +351,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
 
   const createAssetsMutationHandle = useMutation({
     mutationFn: async (payload: CreateAssetType) => {
-      const { data } = await productApi.post("/asset", payload, {
+      const { data } = await api.post("/asset", payload, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -389,7 +389,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
 
   const assetsUrlsListMutation = useMutation({
     mutationFn: async (payload: { assetIds: string[] }) => {
-      const { data } = await productApi.post("/api/asset/all", payload, {
+      const { data } = await api.post("/api/asset/all", payload, {
         headers: {
           "x-store-id": storeId,
         },
@@ -421,7 +421,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
   // delete assets mutations
   const deleteAssetMutation = useMutation({
     mutationFn: async (payload: { assetIds: string[] }) => {
-      const res = await productApi.delete(`/api/asset`, {
+      const res = await api.delete(`/api/asset`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -447,7 +447,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
 
   const variantMutationHandle = useMutation({
     mutationFn: async (payload: Variants[]) => {
-      const { data } = await productApi.post(
+      const { data } = await api.post(
         `/api/product/${singleProductData.id}/variant`,
         payload,
       );
@@ -472,7 +472,7 @@ function AddVarinatModal({ modalOpen, setModalOpen }: AddVarinatModalProps) {
 
   // fetch schema for variants
   const variantFetch = async () => {
-    const { data } = await productApi.get(
+    const { data } = await api.get(
       `/api/schema/default?type=${productTypeName}&gender=${gender}`,
     );
     return data;

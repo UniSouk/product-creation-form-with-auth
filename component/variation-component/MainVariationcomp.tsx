@@ -14,7 +14,7 @@ import ScentPropComp from "./ScentPropComp";
 import FlavorPropComp from "./FlavorPropComp";
 import NumberOfItemsPropComp from "./NumberOfItemsPropComp";
 import { useMutation } from "@tanstack/react-query";
-import { productApi } from "@/lib/axios";
+import { api } from "@/lib/axios";
 import { useProductStore } from "@/store/ProductStore";
 // import useVariationStore from "@/stores/variationStore";
 import { getStoreId } from "@/lib/cookies";
@@ -32,7 +32,7 @@ interface MainVariationcompType {
 export const addOptionsHandleMutation = (onSuccessRefetchData: () => void) =>
   useMutation({
     mutationFn: async (payload: AddOptionPayloadType) => {
-      const { data } = await productApi.post("/api/option", payload, {
+      const { data } = await api.post("/api/option", payload, {
         headers: {
           "x-store-id": storeId,
         },
