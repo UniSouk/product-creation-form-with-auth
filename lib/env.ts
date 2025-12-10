@@ -10,6 +10,7 @@ const envSchema = Joi.object({
   JWT_ACCESS_EXPIRES_IN: Joi.string().default("15m"),
   JWT_REFRESH_EXPIRES_IN: Joi.string().default("7d"),
   AWS_REGION: Joi.string().required(),
+  AWS_ROLE_ARN: Joi.string().required(),
   S3_BUCKET_NAME: Joi.string().required(),
   S3_SIGNED_URL_EXPIRY_TIME: Joi.number().integer().positive().default(86400),
   NEXTAUTH_SECRET: Joi.string().required(),
@@ -41,6 +42,7 @@ export type Env = {
   JWT_ACCESS_EXPIRES_IN: string;
   JWT_REFRESH_EXPIRES_IN: string;
   AWS_REGION: string;
+  AWS_ROLE_ARN: string;
   S3_BUCKET_NAME: string;
   S3_SIGNED_URL_EXPIRY_TIME: number;
   NEXTAUTH_SECRET: string;
@@ -61,6 +63,7 @@ export const env: Env = {
   JWT_ACCESS_EXPIRES_IN: value.JWT_ACCESS_EXPIRES_IN,
   JWT_REFRESH_EXPIRES_IN: value.JWT_REFRESH_EXPIRES_IN,
   AWS_REGION: value.AWS_REGION,
+  AWS_ROLE_ARN: value.AWS_ROLE_ARN,
   S3_BUCKET_NAME: value.S3_BUCKET_NAME,
   S3_SIGNED_URL_EXPIRY_TIME: value.S3_SIGNED_URL_EXPIRY_TIME,
   NEXTAUTH_SECRET: value.NEXTAUTH_SECRET,

@@ -5,6 +5,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env } from "@/lib/env";
+import { awsCredentialsProvider } from "@vercel/oidc-aws-credentials-provider";
 
 const extractBucketNameAndKey = (uri: string) => {
   const uriWithoutPrefix = uri.replace("s3://", "");
@@ -25,6 +26,9 @@ export const getPreSignedUrl = async (key: string): Promise<string> => {
   const presignedUrl = await getSignedUrl(
     new S3Client({
       region: env.AWS_REGION,
+      credentials: awsCredentialsProvider({
+        roleArn: env.AWS_ROLE_ARN,
+      }),
     }),
     command,
     {
@@ -47,6 +51,9 @@ export const getFileUrl = async (uri: string) => {
     const presignedUrl = await getSignedUrl(
       new S3Client({
         region: env.AWS_REGION,
+        credentials: awsCredentialsProvider({
+          roleArn: env.AWS_ROLE_ARN,
+        }),
       }),
       command,
       {
