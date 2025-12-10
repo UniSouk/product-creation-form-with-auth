@@ -16,6 +16,13 @@ const extractBucketNameAndKey = (uri: string) => {
   return { bucket, key };
 };
 
+const s3Client = new S3Client({
+  region: env.AWS_REGION,
+  credentials: awsCredentialsProvider({
+    roleArn: env.AWS_ROLE_ARN,
+  }),
+});
+
 export const getPreSignedUrl = async (key: string): Promise<string> => {
   const command = new PutObjectCommand({
     Bucket: env.S3_BUCKET_NAME,
@@ -23,18 +30,9 @@ export const getPreSignedUrl = async (key: string): Promise<string> => {
   });
 
   // TODO: move this function to shared library
-  const presignedUrl = await getSignedUrl(
-    new S3Client({
-      region: env.AWS_REGION,
-      credentials: awsCredentialsProvider({
-        roleArn: env.AWS_ROLE_ARN,
-      }),
-    }),
-    command,
-    {
-      expiresIn: Number(env.S3_SIGNED_URL_EXPIRY_TIME),
-    }
-  );
+  const presignedUrl = await getSignedUrl(s3Client, command, {
+    expiresIn: Number(env.S3_SIGNED_URL_EXPIRY_TIME),
+  });
 
   return presignedUrl;
 };
@@ -48,18 +46,9 @@ export const getFileUrl = async (uri: string) => {
     const { bucket, key } = extractBucketNameAndKey(uri);
     const command = new GetObjectCommand({ Bucket: bucket, Key: key });
 
-    const presignedUrl = await getSignedUrl(
-      new S3Client({
-        region: env.AWS_REGION,
-        credentials: awsCredentialsProvider({
-          roleArn: env.AWS_ROLE_ARN,
-        }),
-      }),
-      command,
-      {
-        expiresIn: Number(env.S3_SIGNED_URL_EXPIRY_TIME),
-      }
-    );
+    const presignedUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: Number(env.S3_SIGNED_URL_EXPIRY_TIME),
+    });
 
     return presignedUrl;
   }
