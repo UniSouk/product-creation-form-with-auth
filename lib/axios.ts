@@ -1,4 +1,9 @@
-import { getAccessToken, getRefreshToken, getStoreId, removeAllCookies } from "./cookies";
+import {
+  getAccessToken,
+  getRefreshToken,
+  getStoreId,
+  removeAllCookies,
+} from "./cookies";
 
 let accessToken: string | null = getAccessToken() || null;
 
@@ -7,9 +12,7 @@ export const setAccessToken = (token: string | null) => {
 };
 
 const BASE =
-  typeof window === "undefined"
-    ? process.env.NEXT_PUBLIC_BASE_URL
-    : "/api";
+  typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "/api";
 
 async function requestInterceptor(config) {
   const accessToken = getAccessToken();
@@ -74,31 +77,50 @@ export const refreshTokenSingleton = async () => {
   return refreshTokenPromise;
 };
 
-
 async function responseErrorInterceptor(error, config) {
-  if (error.status === 401 && !config._retry) {
+  const status = error?.status;
+
+  // ----- SKIP REFRESH FOR LOGIN & REGISTER -----
+  if (
+    config.url.includes("/api/auth/login") ||
+    config.url.includes("/api/auth/register")
+  ) {
+    throw {
+      response: {
+        status,
+        data: error.data,
+      },
+    };
+  }
+
+  // ----- REFRESH TOKEN LOGIC -----
+  if (status === 401 && !config._retry) {
     config._retry = true;
 
     try {
       const newAccessToken = await refreshTokenSingleton();
-
       config.headers.Authorization = `Bearer ${newAccessToken}`;
-
-      // retry original request
       return api.request(config);
     } catch (refreshError) {
-      const pathname = window.location.pathname;
+      removeAllCookies();
+      window.location.href = "/auth/login";
 
-      if (pathname.indexOf("/auth/") !== 0) {
-        removeAllCookies();
-        window.location.href = "/auth/login";
-      }
-
-      throw refreshError;
+      throw {
+        response: {
+          status: refreshError?.status,
+          data: refreshError?.data,
+        },
+      };
     }
   }
 
-  throw error;
+  // ----- DEFAULT THROW -----
+  throw {
+    response: {
+      status,
+      data: error.data,
+    },
+  };
 }
 
 async function callFetch(config) {

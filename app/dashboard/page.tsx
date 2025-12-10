@@ -24,7 +24,7 @@ export default function Dashboard() {
         const data = res.data.data;
         setProducts(Array.isArray(data.products) ? data.products : []);
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        console.error("Failed to fetch products:", error.response?.data.message);
         setProducts([]);
       } finally {
         setLoading(false);
