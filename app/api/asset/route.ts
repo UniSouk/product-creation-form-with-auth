@@ -86,6 +86,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(createAsset);
   } catch (error) {
+    console.error("Error in asset creation :", error);
     return handleApiError(error);
   }
 }
