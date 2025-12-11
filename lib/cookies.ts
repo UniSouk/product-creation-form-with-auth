@@ -25,6 +25,26 @@ export const getStoreId = () =>{ return Cookies.get("storeId")};
 export const getAccessToken = () => {
   return Cookies.get("accessToken");
 };
+
+export const setAccessTokenCookie = (token: string) => {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const expiresInSeconds = payload.exp - Math.floor(Date.now() / 1000);
+    Cookies.set("accessToken", token, { expires: expiresInSeconds / 86400 }); // Convert to days
+  } catch (error) {
+    console.error("Failed to set access token cookie:", error);
+  }
+};
+
+export const setRefreshTokenCookie = (token: string) => {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const expiresInSeconds = payload.exp - Math.floor(Date.now() / 1000);
+    Cookies.set("refreshToken", token, { expires: expiresInSeconds / 86400 }); // Convert to days
+  } catch (error) {
+    console.error("Failed to set refresh token cookie:", error);
+  }
+};
 // export const getStoreId = () => {
 //   const storeId = "store_Vc3PvYOQrna9GOF7";
 //   return storeId;

@@ -930,7 +930,7 @@ function ChannelPublishingBasics() {
         <div className="flex flex-col md:gap-5 gap-2.5">
           {/* ONDC */}
           {enabledChannels.includes("ONDC") && (
-            <div className="grid grid-cols-3 gap-2 justify-center items-center">
+            <div className="grid md:grid-cols-3 gap-2 justify-center items-center">
               <div className="flex gap-2.5 items-center h-[66px]">
                 <InputCheckbox
                   inputId="ondc"
@@ -1018,7 +1018,7 @@ function ChannelPublishingBasics() {
 
           {/* Default */}
           {enabledChannels.includes("DEFAULT") && (
-            <div className="grid grid-cols-3 gap-2 justify-center items-center">
+            <div className="grid md:grid-cols-3 gap-2 justify-center items-center">
               <div className="flex gap-2.5 items-center h-[66px]">
                 <InputCheckbox
                   inputId="default"
@@ -1106,7 +1106,7 @@ function ChannelPublishingBasics() {
 
           {/* AMAZON */}
           {enabledChannels.includes("AMAZON_IN") && (
-            <div className="grid grid-cols-3 gap-2 justify-center items-center">
+            <div className="grid md:grid-cols-3 gap-2 justify-center items-center">
               <div className="flex gap-2.5 items-center h-[66px]">
                 <InputCheckbox
                   inputId="amazon"
@@ -1189,7 +1189,7 @@ function ChannelPublishingBasics() {
           )}
           {/* WOOCOMMERCE */}
           {enabledChannels.includes("WOOCOMMERCE") && (
-            <div className="grid grid-cols-3 gap-2 justify-center items-center">
+            <div className="grid md:grid-cols-3 gap-2 justify-center items-center">
               <div className="flex gap-2.5 items-center h-[66px]">
                 <InputCheckbox
                   inputId="woocommerce"
@@ -1273,7 +1273,7 @@ function ChannelPublishingBasics() {
           )}
           {/* SHOPIFY */}
           {enabledChannels.includes("SHOPIFY") && (
-            <div className="grid grid-cols-3 gap-2 justify-center items-center">
+            <div className="grid md:grid-cols-3 gap-2 justify-center items-center">
               <div className="flex gap-2.5 items-center h-[66px]">
                 <InputCheckbox
                   inputId="shopify"
@@ -1357,7 +1357,7 @@ function ChannelPublishingBasics() {
           )}
           {/* Wix */}
           {enabledChannels.includes("WIX") && (
-          <div className="grid grid-cols-3 gap-2 justify-center items-center">
+          <div className="grid md:grid-cols-3 gap-2 justify-center items-center">
             <div className="flex gap-2.5 items-center h-[66px]">
               <InputCheckbox
                 inputId="wix"

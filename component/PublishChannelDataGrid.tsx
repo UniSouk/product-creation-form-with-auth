@@ -990,7 +990,7 @@ function PublishChannelDataGrid({
     return (
       <div className="flex flex-col items-center">
         <div
-          className={`w-101 h-10! flex justify-center items-center`}
+          className={`h-10! flex justify-center items-center`}
           onClick={(e) => handleRowImageClick(rowId, e)}
         >
           {rowAssets.length > 0 && rowAssets[0].assetUrl ? (

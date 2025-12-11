@@ -3,6 +3,8 @@ import {
   getRefreshToken,
   getStoreId,
   removeAllCookies,
+  setAccessTokenCookie,
+  setRefreshTokenCookie,
 } from "./cookies";
 
 let accessToken: string | null = getAccessToken() || null;
@@ -66,7 +68,18 @@ export const refreshTokenSingleton = async () => {
       const response = await res.json();
 
       const newAccessToken = response?.data?.accessToken;
+      const newRefreshToken = response?.data?.refreshToken;
+      
+      // Update in-memory token
       setAccessToken(newAccessToken);
+
+      // Persist both tokens to cookies with proper expiration
+      if (newAccessToken) {
+        setAccessTokenCookie(newAccessToken);
+      }
+      if (newRefreshToken) {
+        setRefreshTokenCookie(newRefreshToken);
+      }
 
       return newAccessToken;
     })
