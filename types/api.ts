@@ -74,6 +74,7 @@ export interface ProductResponse {
   originCountry: string | null;
   variants: Variant[];
   assets: Assets[];
+  isReviewed: boolean;
 }
 
 // Pagination Types

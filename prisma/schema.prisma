@@ -366,6 +366,8 @@ model Product {
   assets   Asset[]
   variants Variant[]
 
+  isReviewed Boolean @default(false) @map("is_reviewed")
+
   @@map("product")
 }
 
@@ -509,4 +511,33 @@ model CategoryAttributeEnumValue {
 
   @@unique([code, name])
   @@map("category_attribute_enum_value")
+}
+
+model ProductCreationFeedback {
+  id        BigInt @id @default(dbgenerated("public.next_id()"))
+  productId BigInt @map("product_id")
+  storeId   BigInt @map("store_id")
+
+  overallExperience       Int      @map("overall_experience")
+  formEaseRating          Int      @map("form_ease_rating")
+  helpToCompleteForm      Boolean  @map("help_to_complete_form")
+  confusingFields         String[] @map("confusing_fields")
+  isRequired              Boolean  @map("is_required")
+  effortRating            Int      @map("effort_rating")
+  timeTaken               String   @map("time_taken")
+  anyError                Boolean  @map("any_error")
+  error                   String?
+  mostTimeTakenFields     String[] @map("most_time_taken_fields")
+  isConfused              Boolean  @map("is_confused")
+  confusingMessage        String?  @map("confusing_message")
+  easyNavigationRating    Int      @map("easy_navigation_rating")
+  foundButtons            Boolean  @map("found_buttons")
+  productListingFrequency String   @map("product_listing_frequency")
+  suggestion              String
+  recommend               Boolean
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("product_creation_feedback")
 }

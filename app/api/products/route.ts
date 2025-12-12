@@ -18,7 +18,11 @@ import { ProductListDto } from "@/types/dto/product-list.dto";
 import { ChannelType, ExternalProductIdType, Prisma } from "@prisma/client";
 import { validateDto } from "@/lib/api/validation";
 import { getFileUrl } from "@/lib/api/aws-s3";
-import { CreateProductDto, ExternalProductIdTypeDto, VariantType } from "@/types/dto/create-product.dto";
+import {
+  CreateProductDto,
+  ExternalProductIdTypeDto,
+  VariantType,
+} from "@/types/dto/create-product.dto";
 import { UpdateAssetDto } from "@/types/dto/asset.dto";
 import { generateSku, generateSlug } from "@/lib/api/misc";
 import { CreateOfferDto } from "@/types/dto/create-offer.dto";
@@ -295,7 +299,10 @@ const processProducts = async (
   return Promise.all(assetProcessing);
 };
 
-const createOffer = async (createOfferDto: CreateOfferDto[], storeId: bigint) => {
+const createOffer = async (
+  createOfferDto: CreateOfferDto[],
+  storeId: bigint
+) => {
   const result = await prisma.$transaction(async (tx) => {
     const createInventoryItemsData = await Promise.all(
       createOfferDto.map(async (item) => {
@@ -591,6 +598,7 @@ export async function GET(request: NextRequest) {
             where: { deletedAt: null },
             select: { id: true, position: true, uri: true },
           },
+          isReviewed: true,
         },
       }),
     ]);
@@ -615,7 +623,6 @@ export async function GET(request: NextRequest) {
         channelData: externalData.get(String(variant.id)) || [],
         externalProductId: variant.externalProductIdentifier[0],
       })),
-
     }));
 
     const response: PaginatedResponse<ProductResponse, "products"> = {
@@ -729,7 +736,7 @@ SELECT public.next_id() as next_id`;
         assets: body.productAssets,
       },
     };
-    
+
     let firstSku: string;
     let channels: ChannelType[] = [];
 
@@ -857,14 +864,16 @@ SELECT public.next_id() as next_id`;
           };
         }),
       });
-  
+
       await tx.externalProductIdentifier.createMany({
         data: createProductVariantData.map((variant) => {
           return {
             storeId: variant.storeId,
             variantId: variant.id,
-            type: String(variant.externalProductId?.type || '') as ExternalProductIdType,
-            value: String(variant.externalProductId?.value || ''),
+            type: String(
+              variant.externalProductId?.type || ""
+            ) as ExternalProductIdType,
+            value: String(variant.externalProductId?.value || ""),
           };
         }),
       });
