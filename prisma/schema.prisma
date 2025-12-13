@@ -564,3 +564,34 @@ model ProductFeedback {
 
   @@map("product_feedback")
 }
+
+model CampaignBudget {
+  id          BigInt @id @default(dbgenerated("public.next_id()"))
+  totalBudget Int
+  usedBudget  Int
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("campaign_budget")
+}
+
+enum RewardStatus {
+  PENDING
+  GENERATED
+  REDEEMED
+}
+
+model Reward {
+  id         BigInt @id @default(dbgenerated("public.next_id()"))
+  storeId    BigInt @map("store_id")
+  feedbackId BigInt @map("feedback_id")
+
+  amount Int
+  status RewardStatus
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("reward")
+}

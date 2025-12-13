@@ -21,6 +21,11 @@ const envSchema = Joi.object({
   AMAZON_LWA_CLIENT_SECRET: Joi.string().required(),
   AMAZON_SP_API_URL: Joi.string().required(),
   AMAZON_MARKETPLACE_ID: Joi.string().required(),
+  MAX_REWARD_LIMIT_PER_STORE: Joi.number().integer().positive().default(10),
+  CASHFREE_CLIENT_ID: Joi.string().required(),
+  CASHFREE_CLIENT_SECRET: Joi.string().required(),
+  CASHFREE_PUBLIC_KEY: Joi.string().required(),
+  CASHFREE_BASE_URL: Joi.string().required(),
 }).unknown();
 
 const { value, error } = envSchema
@@ -53,6 +58,11 @@ export type Env = {
   AMAZON_LWA_CLIENT_SECRET: string;
   AMAZON_SP_API_URL: string;
   AMAZON_MARKETPLACE_ID: string;
+  MAX_REWARD_LIMIT_PER_STORE: number;
+  CASHFREE_CLIENT_ID: string;
+  CASHFREE_CLIENT_SECRET: string;
+  CASHFREE_PUBLIC_KEY: string;
+  CASHFREE_BASE_URL: string;
 };
 
 export const env: Env = {
@@ -74,4 +84,9 @@ export const env: Env = {
   AMAZON_LWA_CLIENT_SECRET: value.AMAZON_LWA_CLIENT_SECRET,
   AMAZON_SP_API_URL: value.AMAZON_SP_API_URL,
   AMAZON_MARKETPLACE_ID: value.AMAZON_MARKETPLACE_ID,
+  MAX_REWARD_LIMIT_PER_STORE: value.MAX_REWARD_LIMIT_PER_STORE,
+  CASHFREE_CLIENT_ID: value.CASHFREE_CLIENT_ID,
+  CASHFREE_CLIENT_SECRET: value.CASHFREE_CLIENT_SECRET,
+  CASHFREE_PUBLIC_KEY: value.CASHFREE_PUBLIC_KEY,
+  CASHFREE_BASE_URL: value.CASHFREE_BASE_URL,
 };

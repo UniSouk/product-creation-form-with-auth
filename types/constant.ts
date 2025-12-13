@@ -4416,3 +4416,17 @@ export const CategoryType = Object.freeze({
   MASTER: "master",
   CUSTOM: "custom",
 });
+
+export enum SpinReward {
+  FIVE = 5,
+  TEN = 10,
+  TWENTY = 20,
+  BLNT = 0,
+}
+
+export const WHEEL = [
+  { reward: SpinReward.FIVE, weight: 40 },
+  { reward: SpinReward.TEN, weight: 140 },
+  { reward: SpinReward.TWENTY, weight: 620 },
+  { reward: SpinReward.BLNT, weight: 200 },
+];
