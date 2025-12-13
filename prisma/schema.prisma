@@ -541,3 +541,26 @@ model ProductCreationFeedback {
 
   @@map("product_creation_feedback")
 }
+
+model ProductFeedback {
+  id      BigInt @id @default(dbgenerated("public.next_id()"))
+  storeId BigInt @map("store_id")
+
+  gotStuck         String  @map("got_stuck")
+  stuckReason      String? @map("stuck_reason")
+  prevented        String
+  preventedReason  String? @map("prevented_reason")
+  anyError         Boolean @map("any_error")
+  errorDescription String? @map("error_description")
+  difficulty       Int
+  stoppedStep      String  @map("stopped_step")
+  neededHelp       String  @map("needed_help")
+  neededHelpReason String? @map("needed_help_reason")
+  suggestion       String
+  device           String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("product_feedback")
+}
