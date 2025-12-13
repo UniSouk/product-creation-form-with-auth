@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       return errorResponse("Product is already reviewed", 400);
 
     const result = await prisma.$transaction(async (tx) => {
-      const review = tx.productCreationFeedback.create({
+      const review = await tx.productCreationFeedback.create({
         data: {
           productId: product.id,
           storeId: storeIdBigInt,
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      const updateProduct = tx.product.update({
+      await tx.product.update({
         where: {
           id: product.id,
         },
@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
           isReviewed: true,
         },
       });
+
       return review;
     });
 
