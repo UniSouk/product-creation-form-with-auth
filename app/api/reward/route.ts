@@ -87,6 +87,16 @@ export async function POST(request: NextRequest) {
       return errorResponse("FeedBack not found", 404);
     }
 
+    const findRewards = await prisma.reward.findMany({
+      where: {
+        storeId: storeIdBigInt,
+        feedbackId: feedbackIdBigInt,
+      },
+    });
+    if (findRewards.length > 0) {
+      return errorResponse("Reward already added", 400);
+    }
+
     const result = await prisma.$transaction(async (tx) => {
       const userCashRewardCount = await tx.reward.count({
         where: {
