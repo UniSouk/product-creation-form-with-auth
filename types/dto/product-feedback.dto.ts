@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsBoolean,
   IsNotEmpty,
   IsNumber,
@@ -8,9 +9,9 @@ import {
 } from "class-validator";
 
 export class ProductFeedbackDto {
-  @IsNotEmpty()
-  @IsString()
-  gotStuck: string;
+  @IsArray()
+  @IsString({ each: true })
+  gotStuck: string[];
 
   @IsOptional()
   @IsString()
@@ -41,9 +42,9 @@ export class ProductFeedbackDto {
   @IsString()
   stoppedStep: string;
 
-  @IsNotEmpty()
-  @IsString()
-  neededHelp: string;
+  @IsArray()
+  @IsString({ each: true })
+  neededHelp: string[];
 
   @IsOptional()
   @IsString()
