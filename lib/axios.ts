@@ -182,4 +182,8 @@ export const api = {
   delete(url, headers = {}) {
     return this.request({ url, method: "DELETE", headers });
   },
+
+  patch(url: string, body: any, headers = {}) {
+    return this.request({ url, method: "PATCH", body, headers });
+  },
 };

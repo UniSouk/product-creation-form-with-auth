@@ -4,6 +4,9 @@ const publicAuthPages = ["/auth/login", "/auth/register"];
 const validRoutes = [
   "/dashboard",
   "/dashboard/product-create",
+  "/dashboard/feedback-form",
+  "/dashboard/incomplete-form-feedback",
+  "/dashboard/reward",
   ...publicAuthPages,
 ];
 

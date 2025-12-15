@@ -1,6 +1,7 @@
-
-
 // export const BASE_URL = "https://dev-api.unisouk.com";
+
+import { IncompleteFormState } from "./type/feedback-form";
+import { Option } from "./ui/MultiSelexctComp";
 
 export const Countries: {
   id: string;
@@ -143,13 +144,13 @@ export const CHANNEL_NAME: Record<string, string> = {
   WIX: "WIX",
 };
 
-  export const CHANNEL_NAME_LOWERCASE: Record<string, string> = {
-    ONDC: "ondc",
-    AMAZON_IN: "amazon",
-    WOOCOMMERCE: "woocommerce",
-    SHOPIFY: "shopify",
-    WIX: "wix",
-  };
+export const CHANNEL_NAME_LOWERCASE: Record<string, string> = {
+  ONDC: "ondc",
+  AMAZON_IN: "amazon",
+  WOOCOMMERCE: "woocommerce",
+  SHOPIFY: "shopify",
+  WIX: "wix",
+};
 
 export const CHANNEL_LABELS = {
   ONDC: "ONDC",
@@ -168,4 +169,69 @@ export const PRODUCT_MAPPED_ARRRIBUTES: Record<string, string> = {
   scent: "Scent",
   numberOfItems: "Number of Items",
   itemWeight: "Item Weight",
+};
+
+export const stuckOptions: Option[] = [
+  { label: "Didn’t understand the required fields", value: "requiredFields" },
+  { label: "Faced a validation error", value: "validationError" },
+  { label: "Images failed to upload", value: "imagesFail" },
+  { label: "Price or stock field was confusing", value: "priceStock" },
+  { label: "Category/variant fields were complex", value: "categoryVariant" },
+  { label: "Page got stuck or was slow", value: "pageSlow" },
+  { label: "Something else", value: "other" },
+];
+
+export const preventedOptions: Option[] = [
+  { label: "Form was too long", value: "tooLong" },
+  { label: "Fields were unclear", value: "fieldsUnclear" },
+  { label: "Technical issue / Bug", value: "technicalIssue" },
+  { label: "Didn’t have the required information", value: "noInfo" },
+  { label: "Gave up / Felt overwhelming", value: "gaveUp" },
+  { label: "Other", value: "other" },
+];
+
+export const stopStepOptions: Option[] = [
+  { label: "Basic info", value: "basicInfo" },
+  { label: "Category & attributes", value: "category" },
+  { label: "Pricing", value: "pricing" },
+  { label: "Images", value: "images" },
+  { label: "Inventory", value: "inventory" },
+  { label: "Variants", value: "variants" },
+  { label: "Manufacturing", value: "manufacturing" },
+  { label: "Package", value: "package" },
+  { label: "Publishing Channels", value: "publishingChannels" },
+  { label: "Don’t remember", value: "dontRemember" },
+];
+
+export const completionHelpOptions: Option[] = [
+  { label: "Clear examples", value: "clearExamples" },
+  { label: "Tooltips or hints", value: "tooltips" },
+  { label: "Fewer required fields", value: "fewerFields" },
+  { label: "Auto-fill options", value: "autofill" },
+  { label: "Better explanation of pricing", value: "pricingExplanation" },
+  { label: "Faster load time", value: "fasterLoad" },
+  { label: "A step-by-step guide", value: "stepByStep" },
+  { label: "Chat support / Help center", value: "chatSupport" },
+  { label: "Other", value: "other" },
+];
+
+export const deviceOptions: Option[] = [
+  { label: "Mobile", value: "mobile" },
+  { label: "Desktop", value: "desktop" },
+  { label: "Tablet", value: "tablet" },
+];
+
+export const initialFormState: IncompleteFormState = {
+  gotStuck: [],
+  stuckReason: "",
+  prevented: null,
+  preventedReason: "",
+  anyError: null,
+  errorDescription: "",
+  difficulty: 0,
+  stoppedStep: null,
+  neededHelp: [],
+  neededHelpReason: "",
+  device: null,
+  suggestion: "",
 };

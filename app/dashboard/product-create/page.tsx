@@ -154,10 +154,9 @@ function ProductForm() {
       return data;
     },
     onSuccess: (data) => {
-      successToast(data.message || "Product created");
+      successToast(data.message || "Product created successfully");
       discardHandle();
-      router.push("/dashboard");
-      successToast("Product Created Successfully")
+      router.push(`/dashboard/feedback-form?productId=${data?.data?.id}`);
     },
     onError: (error: unknown) => {
       if (error instanceof AxiosError && error.response) {
@@ -199,7 +198,8 @@ function ProductForm() {
       return data;
     },
     onSuccess: (data) => {
-      successToast(data.message || "Product updated");
+      // successToast(data.message || "Product updated");
+      router.push("/dashboard/feedback-form");
       discardHandle();
       // navigate({
       //   from: "/product/product_create",

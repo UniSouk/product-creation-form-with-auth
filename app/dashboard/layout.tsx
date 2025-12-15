@@ -7,7 +7,7 @@ import {
   LayoutDashboard,
   ChevronDown,
   Menu,
-  X,
+  MessageSquare,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
@@ -39,6 +39,7 @@ export default function DashboardLayout({
   const navItems = [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     { label: "Create Product", icon: Plus, path: "/dashboard/product-create" },
+    { label: "Feedback", icon: MessageSquare, path: "/dashboard/incomplete-form-feedback" },
   ];
 
   useEffect(() => {
@@ -133,32 +134,12 @@ export default function DashboardLayout({
               (e.currentTarget.style.backgroundColor = "transparent")
             }
           >
-            {/* {sidebarOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )} */}
             {!sidebarOpen && <Menu className="w-6 h-6" />}
           </button>
 
           {/* Logo & Brand - Premium */}
           <div className="flex items-center gap-3 flex-1 md:flex-none">
-            {/* <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-lg transition-all duration-200"
-              style={{
-                background: `linear-gradient(135deg, ${colors.brandOrange} 0%, ${colors.brandOrangeDark} 100%)`,
-                boxShadow:
-                  "0px 4px 8px -2px rgba(16, 24, 40, 0.10), 0px 2px 4px -2px rgba(16, 24, 40, 0.06)",
-              }}
-            >
-              CM
-            </div> */}
             <div>
-              {/* <h1
-                className="text-lg font-bold"
-                style={{ color: colors.grayDark }}
-              > */}
-
               <Image
                 src={companyLogo}
                 width={20}
@@ -166,17 +147,9 @@ export default function DashboardLayout({
                 alt="wix-icon"
                 className="w-full"
               />
-              {/* </h1> */}
-              {/* <p
-                className="text-xs font-medium"
-                style={{ color: colors.grayText }}
-              >
-                Product Management
-              </p> */}
             </div>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2">
             {navItems.map((item) => {
               const isActive = pathname === item.path;
@@ -213,7 +186,6 @@ export default function DashboardLayout({
             })}
           </nav>
 
-          {/* User Menu - Elegant */}
           <div ref={sidebarRef} className="flex items-center gap-4 relative">
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -267,24 +239,6 @@ export default function DashboardLayout({
                     "0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03)",
                 }}
               >
-                {/* User Info Header */}
-                {/* <div
-                  className="px-4 py-3 border-b"
-                  style={{ borderColor: colors.grayBorder }}
-                >
-                  <p
-                    className="text-sm font-semibold"
-                    style={{ color: colors.grayDark }}
-                  >
-                    {usersData?.name}
-                  </p>
-                  <p
-                    className="text-xs mt-1"
-                    style={{ color: colors.grayText }}
-                  >
-                    {usersData?.email}
-                  </p>
-                </div> */}
 
                 {/* Mobile Navigation in Dropdown */}
                 <div

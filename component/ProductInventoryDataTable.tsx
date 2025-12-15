@@ -1,5 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
+"use client";
+
 import TrashIcon from "@/assets/icons/TrashIcon";
 import EditIcon from "@/assets/images/edit-01.svg";
 import InputCheckbox from "@/ui/InputCheckbox";
@@ -15,6 +17,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/helper";
 import { ProcessedInventory } from "@/utils/InventoryDataConventer";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type ProductDataTableType = {
   products: ProcessedInventory[];
@@ -28,6 +31,7 @@ export function truncateText(text: string, maxLength: number) {
 }
 
 function ProductInventoryDataTable({ products }: ProductDataTableType) {
+  const router = useRouter();
   return (
     <div className="w-full overflow-x-auto">
       {/* Desktop View */}
@@ -47,6 +51,7 @@ function ProductInventoryDataTable({ products }: ProductDataTableType) {
             <th className="text-gray-600 text-xs font-medium p-3 gap-1 text-start">
               <div className="flex items-center gap-2">Category</div>
             </th>
+            <th className="text-gray-600 text-xs font-medium p-3 gap-1 text-start"></th>
           </tr>
         </thead>
         <tbody>
@@ -177,6 +182,21 @@ function ProductInventoryDataTable({ products }: ProductDataTableType) {
                     {item.categoryName}
                   </div>
                 </td>
+                <td className="p-4">
+                  {!item.isReviewed && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        router.push(
+                          `/dashboard/feedback-form?productId=${item.id}`
+                        )
+                      }
+                      className="w-full text-center text-sm font-medium text-orange-600 border border-orange-300 bg-orange-50 hover:bg-orange-100 active:scale-[0.97] transition-all rounded-lg py-2"
+                    >
+                      Give Feedback
+                    </button>
+                  )}
+                </td>
               </tr>
             ))
           )}
@@ -211,7 +231,9 @@ function ProductInventoryDataTable({ products }: ProductDataTableType) {
                   <p className="text-sm font-medium text-gray-900 truncate">
                     {truncateText(item.title, 40)}
                   </p>
-                  <p className="text-xs text-gray-600">{item.variants.sku}</p>
+                  <p className="text-xs text-gray-600">
+                    {item.variants[0].sku}
+                  </p>
                 </div>
               </div>
 
@@ -315,6 +337,24 @@ function ProductInventoryDataTable({ products }: ProductDataTableType) {
                 <p className="text-xs text-gray-500 mb-1">Category</p>
                 <p className="text-sm text-gray-700">{item.categoryName}</p>
               </div>
+              {!item.isReviewed && (
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      router.push(
+                        `/dashboard/feedback-form?productId=${item.id}`
+                      )
+                    }
+                    className="w-full text-center text-sm font-medium text-orange-600 
+               border border-orange-300 bg-orange-50 
+               hover:bg-orange-100 active:scale-[0.97]
+               transition-all rounded-lg py-2"
+                  >
+                    Give Feedback
+                  </button>
+                </div>
+              )}
             </div>
           ))
         )}
