@@ -21,11 +21,11 @@ const envSchema = Joi.object({
   AMAZON_LWA_CLIENT_SECRET: Joi.string().required(),
   AMAZON_SP_API_URL: Joi.string().required(),
   AMAZON_MARKETPLACE_ID: Joi.string().required(),
-  MAX_REWARD_LIMIT_PER_STORE: Joi.number().integer().positive().default(10),
-  CASHFREE_CLIENT_ID: Joi.string().required(),
-  CASHFREE_CLIENT_SECRET: Joi.string().required(),
-  CASHFREE_PUBLIC_KEY: Joi.string().required(),
-  CASHFREE_BASE_URL: Joi.string().required(),
+  // MAX_REWARD_LIMIT_PER_STORE: Joi.number().integer().positive().default(10),
+  // CASHFREE_CLIENT_ID: Joi.string().required(),
+  // CASHFREE_CLIENT_SECRET: Joi.string().required(),
+  // CASHFREE_PUBLIC_KEY: Joi.string().required(),
+  // CASHFREE_BASE_URL: Joi.string().required(),
 }).unknown();
 
 const { value, error } = envSchema
