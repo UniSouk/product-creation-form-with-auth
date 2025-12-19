@@ -159,7 +159,8 @@ export default function FeedbackForm() {
         successToast(
           response.data.message || "Feedback submitted successfully"
         );
-        router.push(`/dashboard/reward?productId=${productId}&rewardId=${response?.data?.data?.id}`);
+        // router.push(`/dashboard/reward?productId=${productId}&rewardId=${response?.data?.data?.id}`);
+        router.push("/dashboard");
       }
     } catch (error: any) {
       console.error("Failed to submit feedback:", error);
