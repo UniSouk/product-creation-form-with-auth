@@ -157,9 +157,12 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
     if (!resourceUrl) {
       throw new Error("Resource URL is missing");
     }
-    const { data } = await api.get(resourceUrl, {
-      withCredentials: false,
-    });
+    const res = await fetch(resourceUrl, {
+      headers: {
+        credentials: "omit"
+      }
+    })
+    const data = res.json();
     return data;
   };
 
