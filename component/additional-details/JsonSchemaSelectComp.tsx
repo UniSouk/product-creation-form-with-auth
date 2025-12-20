@@ -29,14 +29,20 @@ function JsonSchemaSelectComp({
   const divRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (divRef.current && !divRef.current.contains(e.target as Node)) {
-        setFocusDiv(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-  }, [divRef]);
+useEffect(() => {
+  const handleClickOutside = (e: MouseEvent) => {
+    if (divRef.current && !divRef.current.contains(e.target as Node)) {
+      setFocusDiv(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
 
   const focusDivHandle = () => {
     setFocusDiv(!focusDiv);

@@ -115,7 +115,7 @@ const spinWheel = async () => {
         phone: claimForm?.mobile,
       });
       const data = res?.data;
-      if (data?.data?.cashgramLink) {
+      if (data?.data?.cashgramLink && typeof window !== 'undefined') {
         window.location.href = data?.data?.cashgramLink;
       }
       //

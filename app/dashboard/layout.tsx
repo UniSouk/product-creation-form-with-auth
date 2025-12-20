@@ -75,37 +75,6 @@ export default function DashboardLayout({
     white: "#FFFFFF",
   };
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target as Node)
-      ) {
-        setSidebarOpen(false); // close sidebar
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        mobileSidebarRef.current &&
-        !mobileSidebarRef.current.contains(event.target as Node)
-      ) {
-        setSidebarOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
     <div
       className="flex flex-col min-h-screen"
@@ -284,13 +253,15 @@ export default function DashboardLayout({
                 {/* Sign Out Button */}
                 <button
                   onClick={() => {
-                    document.cookie =
-                      "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                    document.cookie =
-                      "storeId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                    document.cookie =
-                      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                    window.location.href = "/auth/login";
+                    if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+                      document.cookie =
+                        "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                      document.cookie =
+                        "storeId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                      document.cookie =
+                        "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                      window.location.href = "/auth/login";
+                    }
                   }}
                   className="w-full flex items-center gap-3 px-4 py-0.5 text-sm font-medium transition-all duration-200 mt-1"
                   style={{ color: colors.grayTextDark }}
@@ -373,13 +344,15 @@ export default function DashboardLayout({
           })}
           <button
             onClick={() => {
-              document.cookie =
-                "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-              document.cookie =
-                "storeId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-              document.cookie =
-                "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-              window.location.href = "/auth/login";
+              if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+                document.cookie =
+                  "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie =
+                  "storeId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie =
+                  "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                window.location.href = "/auth/login";
+              }
             }}
             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-all duration-200 mt-1"
             style={{ color: colors.grayTextDark }}

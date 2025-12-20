@@ -43,7 +43,11 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
   const [ondcDataProcessed, setOndcDataProcessed] = useState(false);
   const [shopifyDataProcessed, setShopifyDataProcessed] = useState(false);
   const [processingKey, setProcessingKey] = useState(0);
-  window.Buffer = Buffer;
+  
+  // Ensure Buffer is available in browser environment
+  if (typeof window !== 'undefined' && !window.Buffer) {
+    window.Buffer = Buffer;
+  }
 
   const queryClient = useQueryClient();
 
@@ -263,10 +267,13 @@ function AddtionalFormModal({ open, setOpen }: AddtionalFormModalType) {
         setOpen && setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleCloseOutsideModal);
-    return () => {
-      document.removeEventListener("mousedown", handleCloseOutsideModal);
-    };
+    
+    if (typeof document !== 'undefined') {
+      document.addEventListener("mousedown", handleCloseOutsideModal);
+      return () => {
+        document.removeEventListener("mousedown", handleCloseOutsideModal);
+      };
+    }
   }, [popUpRef, setOpen]);
 
   const activateTabHandle = (idx: number, tab: string) => {

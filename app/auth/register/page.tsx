@@ -31,7 +31,10 @@ export default function RegisterPage() {
       ).toUTCString();
       cookieStr += `; Expires=${expires}`;
     }
-    document.cookie = cookieStr;
+    
+    if (typeof document !== 'undefined') {
+      document.cookie = cookieStr;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

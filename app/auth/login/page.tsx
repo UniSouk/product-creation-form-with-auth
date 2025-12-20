@@ -22,7 +22,10 @@ export default function LoginPage() {
       const expires = new Date(Date.now() + expiresInSeconds * 1000).toUTCString();
       cookieStr += `; Expires=${expires}`;
     }
-    document.cookie = cookieStr;
+    
+    if (typeof document !== 'undefined') {
+      document.cookie = cookieStr;
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {

@@ -57,7 +57,11 @@ function DynamicFormsRenderComp({
   setOpen,
   activeTab,
 }: DynamicFormPropsType) {
-  window.Buffer = Buffer;
+  // Ensure Buffer is available in browser environment
+  if (typeof window !== 'undefined' && !window.Buffer) {
+    window.Buffer = Buffer;
+  }
+  
   const { setAmazonExtraData } = useProductStore();
   const [data, setdata] = useState<UskData>({
     ...initialData,

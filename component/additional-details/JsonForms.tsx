@@ -36,7 +36,11 @@ const JsonForms: React.FC<JsonFormsProps> = ({
   setOpen,
   setIsSave
 }) => {
-  window.Buffer = Buffer;
+  // Ensure Buffer is available in browser environment
+  if (typeof window !== 'undefined' && !window.Buffer) {
+    window.Buffer = Buffer;
+  }
+  
   const [traverseSchemaValue, setTraverseSchemaValue] = useState<
     Record<string, PrimitiveValue>
   >({});

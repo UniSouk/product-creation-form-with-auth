@@ -159,7 +159,7 @@ export default function IncompleteFormFeedback() {
     >
       <div className="space-y-1">
         <h2 className="text-2xl font-bold text-gray-900">
-          Product Form Feedback
+          Feedback for Incomplete Product Creation
         </h2>
         <p className="text-sm text-gray-600">
           <span className="font-semibold text-red-500">
