@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import useVariationStore from "@/store/VariationStore";
 import InputComp from "../ui/InputComp";
 import { VariantsDataType } from "@/type/variation-type";
@@ -63,6 +63,61 @@ function ProductEanComp() {
   });
 
   const eanValues = watch();
+
+  const duplicateEans = useMemo(() => {
+    const map = new Map<string, string[]>();
+
+    if (!activeVariants?.length) return map;
+
+    activeVariants.forEach((_, idx) => {
+      const fieldName = `eanNumber-${idx}`;
+      const value = eanValues[fieldName];
+
+      if (value && (value.length === 8 || value.length === 13)) {
+        if (!map.has(value)) map.set(value, []);
+        map.get(value)!.push(fieldName);
+      }
+    });
+
+    return map;
+  }, [eanValues, activeVariants?.length]);
+
+  useEffect(() => {
+    if (!activeVariants?.length) return;
+
+    // Set duplicate errors
+    duplicateEans.forEach((fields) => {
+      if (fields.length > 1) {
+        fields.forEach((fieldName) => {
+          if (!errors[fieldName]) {
+            setError(fieldName, {
+              type: "manual",
+              message: "This EAN is already entered for another variant.",
+            });
+          }
+        });
+      }
+    });
+
+    // Clear resolved duplicate errors
+    activeVariants.forEach((_, idx) => {
+      const fieldName = `eanNumber-${idx}`;
+      const value = eanValues[fieldName];
+
+      const isDuplicate =
+        value &&
+        duplicateEans.has(value) &&
+        duplicateEans.get(value)!.length > 1;
+
+      if (
+        !isDuplicate &&
+        errors[fieldName]?.message ===
+          "This EAN is already entered for another variant."
+      ) {
+        clearErrors(fieldName);
+      }
+    });
+  }, [duplicateEans]);
 
   // Track last validated value and length for each field
   const lastValidatedRef = useRef<
@@ -318,6 +373,51 @@ function ProductEanComp() {
 
     return `${validAttributes.join("/")}`;
   };
+
+  //   useEffect(() => {
+  //   if (!activeVariants?.length) return;
+
+  //   const frequencyMap = new Map<string, string[]>();
+
+  //   // Build frequency map
+  //   activeVariants.forEach((_, idx) => {
+  //     const fieldName = `eanNumber-${idx}`;
+  //     const value = eanValues[fieldName];
+
+  //     if (value && (value.length === 8 || value.length === 13)) {
+  //       if (!frequencyMap.has(value)) {
+  //         frequencyMap.set(value, []);
+  //       }
+  //       frequencyMap.get(value)!.push(fieldName);
+  //     }
+  //   });
+
+  //   // Apply errors
+  //   frequencyMap.forEach((fields) => {
+  //     if (fields.length > 1) {
+  //       fields.forEach((fieldName) => {
+  //         setError(fieldName, {
+  //           type: "manual",
+  //           message: "This EAN is already entered for another variant.",
+  //         });
+  //       });
+  //     }
+  //   });
+
+  //   // Clear duplicate errors when resolved
+  //   activeVariants.forEach((_, idx: number) => {
+  //     const fieldName = `eanNumber-${idx}`;
+  //     const value = eanValues[fieldName];
+
+  //     if (
+  //       value &&
+  //       frequencyMap.has(value) &&
+  //       frequencyMap.get(value)!.length === 1
+  //     ) {
+  //       clearErrors(fieldName);
+  //     }
+  //   });
+  // }, [eanValues, activeVariants?.length]);
 
   if (!activeVariants?.length) {
     return null;
